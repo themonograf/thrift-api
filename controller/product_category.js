@@ -3,7 +3,7 @@ const repository = require("../config/repository/index")
 
 const controller = {}
 
-controller.createProductCategroy = async function (req, res) {
+controller.createProductCategory = async function (req, res) {
     const errors = validationResult(req)
     if (!errors.isEmpty()){
         return res.status(404).json({
@@ -12,7 +12,7 @@ controller.createProductCategroy = async function (req, res) {
         })
     }
 
-    repository.productCategory.createProductCategroy(req, (err) => {
+    repository.productCategory.createProductCategory(req, (err) => {
         if(err){
             return res.status(404).json({
                 success: false,
@@ -26,7 +26,7 @@ controller.createProductCategroy = async function (req, res) {
     })
 }
 
-controller.updateProductCategroy = async function (req, res) {
+controller.updateProductCategory = async function (req, res) {
     const errors = validationResult(req)
     if (!errors.isEmpty()){
         return res.status(404).json({
@@ -35,7 +35,7 @@ controller.updateProductCategroy = async function (req, res) {
         })
     }
 
-    repository.productCategory.updateProductCategroy(req, (err) => {
+    repository.productCategory.updateProductCategory(req, (err) => {
         if(err){
             return res.status(404).json({
                 success: false,
@@ -49,7 +49,7 @@ controller.updateProductCategroy = async function (req, res) {
     })
 }
 
-controller.deleteProductCategroy = async function (req, res) {
+controller.deleteProductCategory = async function (req, res) {
     const errors = validationResult(req)
     if (!errors.isEmpty()){
         return res.status(404).json({
@@ -58,7 +58,7 @@ controller.deleteProductCategroy = async function (req, res) {
         })
     }
 
-    repository.productCategory.deleteProductCategroy(req, (err) => {
+    repository.productCategory.deleteProductCategory(req, (err) => {
         if(err){
             return res.status(404).json({
                 success: false,
@@ -72,7 +72,7 @@ controller.deleteProductCategroy = async function (req, res) {
     })
 }
 
-controller.getAllProductCategroy = async function (req, res) {
+controller.getAllProductCategory = async function (req, res) {
     req.query.keyword = req.query.keyword || ""
     const errors = validationResult(req)
     if (!errors.isEmpty()){
@@ -82,7 +82,7 @@ controller.getAllProductCategroy = async function (req, res) {
         })
     }
 
-    repository.productCategory.getAllProductCategroy(req, (err, result) => {
+    repository.productCategory.getAllProductCategory(req, (err, result) => {
         if(err){
             return res.status(404).json({
                 success: false,

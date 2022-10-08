@@ -3,26 +3,35 @@ const middleware = {}
 
 middleware.validate = (method) => {
     switch (method) {
-        case 'createProductCategory': {
+        case 'createUser': {
             return [
-                body('category', 'Category is required').notEmpty().exists(),
+                body('name', 'Name is required').notEmpty().exists(),
+                body('username', 'Username is required').notEmpty().exists(),
+                body('password' ,'Password is required').notEmpty().exists()
             ]
         }
-        case 'updateProductCategory': {
+        case 'updateUser': {
             return [
-                body('category', 'Category is required').notEmpty().exists(),
+                body('name', 'Name is required').notEmpty().exists(),
+                body('username', 'Username is required').notEmpty().exists(),
                 body('id' ,'Id is required').notEmpty().exists()
             ]
         }
-        case 'deleteProductCategory': {
+        case 'deleteUser': {
             return [
                 param('id' ,'Id is required').notEmpty().exists().isInt()
             ]
         }
-        case 'getProductCategory': {
+        case 'getUser': {
             return [
                 query('page' ,'Page is required').notEmpty().exists().isInt(),
                 query('limit' ,'Limit is required').notEmpty().exists().isInt(),
+            ]
+        }
+        case 'login': {
+            return [
+                body('username' ,'Username is required').notEmpty().exists(),
+                body('password' ,'Password is required').notEmpty().exists(),
             ]
         }
     }

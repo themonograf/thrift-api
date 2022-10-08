@@ -48,14 +48,15 @@ repository.deleteUser = async function (req, callback) {
 repository.getAllUser = async function (req, callback) {
     try {
         const { count, rows } = await model.user.findAndCountAll({
-            offset: parseInt(req.query.page),
-            limit: parseInt(req.query.limit),
             where:{
                 [Op.or]:[
                     {name:{[Op.like]: '%' + req.query.keyword + '%'}},
                     {username:{[Op.like]: '%' + req.query.keyword + '%'}}
                 ]
-            }
+            },
+            order: [['updatedAt','DESC']],
+            offset: parseInt(req.query.page),
+            limit: parseInt(req.query.limit),
         })
         
         return callback(null, {total: count, data: rows})

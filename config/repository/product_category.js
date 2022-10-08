@@ -45,11 +45,12 @@ repository.deleteProductCategory = async function (req, callback) {
 repository.getAllProductCategory = async function (req, callback) {
     try {
         const { count, rows } = await model.productCategory.findAndCountAll({
-            offset: parseInt(req.query.page),
-            limit: parseInt(req.query.limit),
             where:{
                 category:{[Op.like]: '%' + req.query.keyword + '%'}
-            }
+            },
+            offset: parseInt(req.query.page),
+            limit: parseInt(req.query.limit),
+            order: [['updatedAt','DESC']],
         })
         
         return callback(null, {total: count, data: rows})
