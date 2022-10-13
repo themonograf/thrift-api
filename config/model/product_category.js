@@ -2,7 +2,8 @@ const Sequelize = require("sequelize")
 const db = require("../database/database")
 
 var productCategory = db.define('product_category',{
-    category: Sequelize.STRING
+    category: Sequelize.STRING,
+    image: Sequelize.STRING,
 },{
     paranoid: true
 })

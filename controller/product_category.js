@@ -96,4 +96,21 @@ controller.getAllProductCategory = async function (req, res) {
     })
 }
 
+controller.getAllProductCategoryCatalog = async function (req, res) {
+    req.query.keyword = req.query.keyword || ""
+
+    repository.productCategory.getAllProductCategoryCatalog(req, (err, result) => {
+        if(err){
+            return res.status(404).json({
+                success: false,
+                message: err
+            })
+        }
+        return res.json({
+            success: true,
+            data: result
+        })
+    })
+}
+
 module.exports = controller

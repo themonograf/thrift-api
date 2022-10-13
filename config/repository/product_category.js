@@ -4,9 +4,10 @@ const repository = {}
 
 repository.createProductCategory = async function (req, callback) {
     try {
-        const { category } = req.body
+        const { category, image } = req.body
         await model.productCategory.create({
-            category
+            category,
+            image
         })
         return callback(null)
     } catch (error) {
@@ -16,9 +17,10 @@ repository.createProductCategory = async function (req, callback) {
 
 repository.updateProductCategory = async function (req, callback) {
     try {
-        const { id, category } = req.body
+        const { id, category, image } = req.body
         await model.productCategory.update({
-            category
+            category,
+            image
         },{
             where: {id}
         })
@@ -62,6 +64,21 @@ repository.getAllProductCategory = async function (req, callback) {
 repository.getProductCategoryById = async function (id, callback) {
     try {
         const data = await model.user.findByPk(id)
+        return callback(null, data)
+    } catch (error) {
+        return callback(error)
+    }
+}
+
+repository.getAllProductCategoryCatalog = async function (req, callback) {
+    try {
+        const data = await model.productCategory.findAll({
+            where:{
+                category:{[Op.like]: '%' + req.query.keyword + '%'}
+            },
+            order: [['category','ASC']],
+        })
+        
         return callback(null, data)
     } catch (error) {
         return callback(error)

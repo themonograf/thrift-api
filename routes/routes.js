@@ -49,6 +49,11 @@ const listRoutes = {
         func: "deleteProductCategory",
         controllerModel: controller.productCategory.deleteProductCategory,
     }],
+    catalog: [{
+        route: "/catalog",
+        method: "get",
+        controllerModel: controller.productCategory.getAllProductCategoryCatalog,
+    }],
 }
 
 module.exports = listRoutes
