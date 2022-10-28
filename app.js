@@ -11,7 +11,11 @@ const upload = require("./routes/upload");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(expressValidator.check());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
