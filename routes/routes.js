@@ -1,59 +1,107 @@
-const controller = require("../controller")
+const controller = require("../controller");
+const middleware = require("../config/middleware/index");
 
-const listRoutes = { 
-    user: [{
-        route: "/",
-        method: "get",
-        func: "getUser",
-        controllerModel: controller.user.getAll,
-    }, {
-        route: "/",
-        method: "post",
-        func: "createUser",
-        controllerModel: controller.user.createUser,
-    }, {
-        route: "/",
-        method: "put",
-        func: "updateUser",
-        controllerModel: controller.user.updateUser,
-    }, {
-        route: "/:id",
-        method: "delete",
-        func: "deleteUser",
-        controllerModel: controller.user.deleteUser,
-    }],
-    auth: [{
-        route: "/login",
-        method: "post",
-        func: "login",
-        controllerModel: controller.user.login
-    }],
-    productCategory: [{
-        route: "/",
-        method: "get",
-        func: "getProductCategory",
-        controllerModel: controller.productCategory.getAllProductCategory,
-    }, {
-        route: "/",
-        method: "post",
-        func: "createProductCategory",
-        controllerModel: controller.productCategory.createProductCategory,
-    }, {
-        route: "/",
-        method: "put",
-        func: "updateProductCategory",
-        controllerModel: controller.productCategory.updateProductCategory,
-    }, {
-        route: "/:id",
-        method: "delete",
-        func: "deleteProductCategory",
-        controllerModel: controller.productCategory.deleteProductCategory,
-    }],
-    catalog: [{
-        route: "/catalog",
-        method: "get",
-        controllerModel: controller.productCategory.getAllProductCategoryCatalog,
-    }],
-}
+const listRoutes = {
+  user: [
+    {
+      route: "/",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.user.validate("getUser"),
+      ],
+      controllerModel: controller.user.getAll,
+    },
+    {
+      route: "/",
+      method: "post",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.user.validate("createUser"),
+      ],
+      controllerModel: controller.user.createUser,
+    },
+    {
+      route: "/",
+      method: "put",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.user.validate("updateUser"),
+      ],
+      controllerModel: controller.user.updateUser,
+    },
+    {
+      route: "/:id",
+      method: "delete",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.user.validate("deleteUser"),
+      ],
+      controllerModel: controller.user.deleteUser,
+    },
+  ],
+  auth: [
+    {
+      route: "/login",
+      method: "post",
+      middleware: [middleware.user.validate("login")],
+      controllerModel: controller.user.login,
+    },
+    {
+      route: "/refresh",
+      method: "post",
+      middleware: [
+        middleware.user.validate("refresh"),
+        middleware.auth.checkRefreshToken,
+      ],
+      controllerModel: controller.user.refreshToken,
+    },
+  ],
+  productCategory: [
+    {
+      route: "/",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.productCategory.validate("getProductCategory"),
+      ],
+      controllerModel: controller.productCategory.getAllProductCategory,
+    },
+    {
+      route: "/",
+      method: "post",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.productCategory.validate("createProductCategory"),
+      ],
+      controllerModel: controller.productCategory.createProductCategory,
+    },
+    {
+      route: "/",
+      method: "put",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.productCategory.validate("updateProductCategory"),
+      ],
+      controllerModel: controller.productCategory.updateProductCategory,
+    },
+    {
+      route: "/:id",
+      method: "delete",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.productCategory.validate("deleteProductCategory"),
+      ],
+      controllerModel: controller.productCategory.deleteProductCategory,
+    },
+  ],
+  catalog: [
+    {
+      route: "/catalog",
+      method: "get",
+      controllerModel: controller.productCategory.getAllProductCategoryCatalog,
+    },
+  ],
+};
 
-module.exports = listRoutes
+module.exports = listRoutes;

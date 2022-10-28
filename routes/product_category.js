@@ -1,9 +1,10 @@
-const express = require("express")
-const router = express.Router()
-const middleware = require("../config/middleware/index")
-const listRoutes = require("./routes")
+const express = require("express");
+const router = express.Router();
+const listRoutes = require("./routes");
 
-listRoutes["productCategory"].map(x => router[x.method](x.route, [middleware.auth.checkToken, middleware.productCategory.validate(x.func)], x.controllerModel))
-listRoutes["catalog"].map(x => router[x.method](x.route, x.controllerModel))
+listRoutes["productCategory"].map((x) =>
+  router[x.method](x.route, x.middleware, x.controllerModel)
+);
+listRoutes["catalog"].map((x) => router[x.method](x.route, x.controllerModel));
 
-module.exports = router
+module.exports = router;
