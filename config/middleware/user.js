@@ -26,6 +26,14 @@ middleware.validate = (method) => {
         query("limit", "Limit is required").notEmpty().exists().isInt(),
       ];
     }
+    case "getUserData": {
+      return [
+        param("username", "Username is required")
+          .notEmpty()
+          .exists()
+          .isString(),
+      ];
+    }
     case "login": {
       return [
         body("username", "Username is required").notEmpty().exists(),

@@ -101,6 +101,36 @@ controller.getAll = async function (req, res) {
   });
 };
 
+controller.getByUsername = async function (req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(404).json({
+      success: false,
+      message: errors.array()[0].msg,
+    });
+  }
+
+  repository.user.getUserByUsername(req.params.username, (err, results) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    } else if (!results) {
+      return res.status(404).json({
+        success: false,
+        message: "Username Not Found",
+      });
+    } else {
+      results.password = undefined;
+      return res.json({
+        success: true,
+        data: results,
+      });
+    }
+  });
+};
+
 controller.login = async function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

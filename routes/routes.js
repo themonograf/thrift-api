@@ -13,6 +13,15 @@ const listRoutes = {
       controllerModel: controller.user.getAll,
     },
     {
+      route: "/:username",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.user.validate("getUserData"),
+      ],
+      controllerModel: controller.user.getByUsername,
+    },
+    {
       route: "/",
       method: "post",
       middleware: [
