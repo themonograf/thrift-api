@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const repository = require("../config/repository/index");
-const { sign } = require("jsonwebtoken");
+const { sign, decode } = require("jsonwebtoken");
 
 const controller = {};
 
@@ -129,7 +129,7 @@ controller.login = async function (req, res) {
       const username = results.username;
       results.password = undefined;
       const accessToken = sign({ username }, process.env.JWT_KEY, {
-        expiresIn: "1h",
+        expiresIn: "4h",
       });
       const refreshToken = sign({ username }, process.env.JWT_KEY_REFRESH, {
         expiresIn: "8h",
@@ -140,6 +140,7 @@ controller.login = async function (req, res) {
         data: results,
         accessToken,
         refreshToken,
+        expiresAt: decode(accessToken, process.env.JWT_KEY)?.exp,
       });
     }
 
@@ -163,12 +164,17 @@ controller.refreshToken = async function (req, res) {
   }
 
   const accessToken = sign({ username }, process.env.JWT_KEY, {
-    expiresIn: "1h",
+    expiresIn: "4h",
   });
   const refreshToken = sign({ username }, process.env.JWT_KEY_REFRESH, {
     expiresIn: "8h",
   });
-  return res.status(200).json({ success: true, accessToken, refreshToken });
+  return res.status(200).json({
+    success: true,
+    accessToken,
+    expiresAt: decode(accessToken, process.env.JWT_KEY)?.exp,
+    refreshToken,
+  });
 };
 
 module.exports = controller;
