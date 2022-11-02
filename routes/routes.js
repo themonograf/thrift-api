@@ -77,6 +77,15 @@ const listRoutes = {
       controllerModel: controller.productCategory.getAllProductCategory,
     },
     {
+      route: "/:id",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.productCategory.validate("getAProductCategory"),
+      ],
+      controllerModel: controller.productCategory.getProductCategory,
+    },
+    {
       route: "/",
       method: "post",
       middleware: [
