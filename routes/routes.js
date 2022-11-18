@@ -113,11 +113,21 @@ const listRoutes = {
       controllerModel: controller.productCategory.deleteProductCategory,
     },
   ],
-  catalog: [
+  catalogProductCategory: [
     {
       route: "/catalog",
       method: "get",
       controllerModel: controller.productCategory.getAllProductCategoryCatalog,
+    },
+  ],
+  catalogProduct: [
+    {
+      route: "/catalog",
+      method: "get",
+      middleware: [
+        middleware.product.validate("getAllProduct"),
+      ],
+      controllerModel: controller.product.getAllProductCatalog,
     },
   ],
 };

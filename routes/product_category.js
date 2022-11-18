@@ -5,6 +5,6 @@ const listRoutes = require("./routes");
 listRoutes["productCategory"].map((x) =>
   router[x.method](x.route, x.middleware, x.controllerModel)
 );
-listRoutes["catalog"].map((x) => router[x.method](x.route, x.controllerModel));
+listRoutes["catalogProductCategory"].map((x) => router[x.method](x.route, x.controllerModel));
 
 module.exports = router;
