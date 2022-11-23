@@ -18,6 +18,7 @@ repository.getAllProductCatalog = async function (req, callback) {
     }
 
     const { count, rows } = await model.product.findAndCountAll({
+      distinct: true,
       where: queryCondition,
       offset: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
