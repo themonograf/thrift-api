@@ -19,6 +19,7 @@ controller.getResellerByUsername = async function (req, res) {
           message: "Reseller Not Found",
         });
       } else {
+        results.password = undefined;
         return res.json({
           success: true,
           data: results,
