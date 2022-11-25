@@ -53,14 +53,14 @@ const listRoutes = {
     {
       route: "/login",
       method: "post",
-      middleware: [middleware.user.validate("login")],
+      middleware: [middleware.login.validate("login")],
       controllerModel: controller.user.login,
     },
     {
       route: "/refresh",
       method: "post",
       middleware: [
-        middleware.user.validate("refresh"),
+        middleware.login.validate("refresh"),
         middleware.auth.checkRefreshToken,
       ],
       controllerModel: controller.user.refreshToken,
@@ -113,23 +113,51 @@ const listRoutes = {
       controllerModel: controller.productCategory.deleteProductCategory,
     },
   ],
-  catalogProductCategory: [
+  catalog: [
     {
-      route: "/catalog",
+      route: "/reseller",
       method: "get",
-      controllerModel: controller.productCategory.getAllProductCategoryCatalog,
+      middleware: [],
+      controllerModel: controller.reseller.getResellerByUsername,
     },
-  ],
-  catalogProduct: [
     {
-      route: "/catalog",
+      route: "/product",
       method: "get",
       middleware: [
         middleware.product.validate("getAllProduct"),
       ],
       controllerModel: controller.product.getAllProductCatalog,
     },
-  ],
+    {
+      route: "/product/:slug",
+      method: "get",
+      middleware: [
+        middleware.product.validate("getProductBySlug"),
+      ],
+      controllerModel: controller.product.getProductByslug,
+    },
+    {
+      route: "/product-category",
+      method: "get",
+      middleware: [],
+      controllerModel: controller.productCategory.getAllProductCategoryCatalog,
+    },
+    {
+      route: "/login",
+      method: "post",
+      middleware: [middleware.login.validate("login")],
+      controllerModel: controller.reseller.loginReseller,
+    },
+    {
+      route: "/refresh",
+      method: "post",
+      middleware: [
+        middleware.login.validate("refresh"),
+        middleware.auth.checkRefreshToken,
+      ],
+      controllerModel: controller.reseller.refreshTokenReseller,
+    },
+  ]
 };
 
 module.exports = listRoutes;

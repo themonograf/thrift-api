@@ -13,8 +13,27 @@ controller.getAllProductCatalog = async function (req, res) {
     });
   }
 
-  repository.product.getAllProductCatalog(
-    req,
+  var resellerId = 0
+  if((req.get("reseller")) && req.get("reseller") != ""){
+    await repository.reseller.getResellerByUsername(req.get("reseller"), (err, results) => {
+      if (err) {
+        return res.status(404).json({
+          success: false,
+          message: err,
+        });
+      } else if (!results) {
+        return res.status(404).json({
+          success: false,
+          message: "Reseller Not Found",
+        });
+      } else {
+        resellerId = results.id
+      }
+    });
+  }
+
+  await repository.product.getAllProductCatalog(
+    req, resellerId,
     (err, result) => {
       if (err) {
         return res.status(404).json({
@@ -28,6 +47,55 @@ controller.getAllProductCatalog = async function (req, res) {
       });
     }
   );
+};
+
+controller.getProductByslug = async function (req, res) {
+  const { slug } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(404).json({
+      success: false,
+      message: errors.array()[0].msg,
+    });
+  }
+
+  var resellerId = 0
+  if((req.get("reseller")) && req.get("reseller") != ""){
+    await repository.reseller.getResellerByUsername(req.get("reseller"), (err, results) => {
+      if (err) {
+        return res.status(404).json({
+          success: false,
+          message: err,
+        });
+      } else if (!results) {
+        return res.status(404).json({
+          success: false,
+          message: "Reseller Not Found",
+        });
+      } else {
+        resellerId = results.id
+      }
+    });
+  }
+
+  await repository.product.getProductByslug(slug, resellerId, (err, results) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    } else if (!results) {
+      return res.status(404).json({
+        success: false,
+        message: "Data Not Found",
+      });
+    } else {
+      return res.json({
+        success: true,
+        data: results,
+      });
+    }
+  });
 };
 
 module.exports = controller;

@@ -34,17 +34,6 @@ middleware.validate = (method) => {
           .isString(),
       ];
     }
-    case "login": {
-      return [
-        body("username", "Username is required").notEmpty().exists(),
-        body("password", "Password is required").notEmpty().exists(),
-      ];
-    }
-    case "refresh": {
-      return [
-        body("refreshToken", "Refresh token is required").notEmpty().exists(),
-      ];
-    }
   }
 };
 

@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const model = require("../model/index");
 const repository = {};
 
-repository.getAllProductCatalog = async function (req, callback) {
+repository.getAllProductCatalog = async function (req, resellerId, callback) {
   try {
     queryCondition = {}
     if (req.query.keyword != "") {
@@ -17,18 +17,41 @@ repository.getAllProductCatalog = async function (req, callback) {
       }
     }
 
+    includeCondition = []
+
+    includeCondition[0] = {model: model.productImage}
+    if (resellerId > 0) {
+      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId}}
+    }
+
     const { count, rows } = await model.product.findAndCountAll({
       distinct: true,
       where: queryCondition,
       offset: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
       order: [["name", "ASC"]],
-      include: [
-        {model: model.productImage}
-      ]
+      include: includeCondition
     });
 
     return callback(null, { total: count, data: rows });
+  } catch (error) {
+    return callback(error);
+  }
+};
+
+repository.getProductByslug = async function (slug, resellerId, callback) {
+  try {
+    includeCondition = []
+
+    includeCondition[0] = {model: model.productImage}
+    if (resellerId > 0) {
+      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId}}
+    }
+    const data = await model.product.findOne({
+      where : {slug: slug},
+      include: includeCondition,
+    });
+    return callback(null, data);
   } catch (error) {
     return callback(error);
   }
