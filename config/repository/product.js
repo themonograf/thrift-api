@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const model = require("../model/index");
+const helper = require("../../helper/helper");
 const repository = {};
 
 repository.getAllProductCatalog = async function (req, resellerId, callback) {
@@ -24,10 +25,14 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
       includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId}}
     }
 
+    const offset = helper.getOffset(req.query.page, req.query.limit);
+    console.log("offset: " + offset)
+
     const { count, rows } = await model.product.findAndCountAll({
       distinct: true,
       where: queryCondition,
-      offset: parseInt(req.query.page),
+      // offset: parseInt(req.query.page),
+      offset,
       limit: parseInt(req.query.limit),
       order: [["name", "ASC"]],
       include: includeCondition

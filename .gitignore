@@ -108,3 +108,4 @@ dist
 /tmp
 .htaccess
 yarn.lock
+pnpm-lock.yaml
