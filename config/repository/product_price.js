@@ -16,7 +16,6 @@ repository.createProductPrice = async function (req, callback) {
     });
     return callback(null);
   } catch (error) {
-    console.log(error)
     return callback(error);
   }
 };
@@ -41,7 +40,6 @@ repository.updateProductPrice = async function (req, callback) {
 
     return callback(null);
   } catch (error) {
-    console.log(error)
     return callback(error);
   }
 };

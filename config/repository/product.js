@@ -21,12 +21,15 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
     includeCondition = []
 
     includeCondition[0] = {model: model.productImage}
-    if (resellerId > 0) {
-      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
+    if((req.user_id) && req.user_id > 0){
+      includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: false}
+    }else{
+      if (resellerId > 0) {
+        includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
+      }
     }
 
     const offset = helper.getOffset(req.query.page, req.query.limit);
-    console.log("offset: " + offset)
 
     const { count, rows } = await model.product.findAndCountAll({
       distinct: true,
@@ -49,8 +52,12 @@ repository.getProductByslug = async function (slug, resellerId, callback) {
     includeCondition = []
 
     includeCondition[0] = {model: model.productImage}
-    if (resellerId > 0) {
-      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
+    if((req.user_id) && req.user_id > 0){
+      includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: false}
+    }else{
+      if (resellerId > 0) {
+        includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
+      }
     }
     const data = await model.product.findOne({
       where : {slug: slug},

@@ -46,7 +46,6 @@ controller.loginReseller = async function (req, res) {
 
   await repository.reseller.getResellerByUsername(req.body.username, (err, results) => {
     if (err) {
-      console.log(err)
       return res.status(404).json({
         success: false,
         message: err,

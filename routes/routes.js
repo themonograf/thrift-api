@@ -133,6 +133,7 @@ const listRoutes = {
       route: "/product",
       method: "get",
       middleware: [
+        middleware.auth.checkTokenOptional,
         middleware.product.validate("getAllProduct"),
       ],
       controllerModel: controller.product.getAllProductCatalog,
@@ -141,6 +142,7 @@ const listRoutes = {
       route: "/product/:slug",
       method: "get",
       middleware: [
+        middleware.auth.checkTokenOptional,
         middleware.product.validate("getProductBySlug"),
       ],
       controllerModel: controller.product.getProductByslug,

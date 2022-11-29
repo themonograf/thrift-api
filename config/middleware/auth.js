@@ -76,4 +76,25 @@ auth.checkRefreshToken = async (req, res, next) => {
   }
 };
 
+auth.checkTokenOptional = (req, res, next) => {
+  let token = req.get("authorization");
+  if (token) {
+    token = token.split(" ")[1];
+    verify(token, process.env.JWT_KEY, (err, decode) => {
+      if (err) {
+        return res.status(401).json({
+          ...err,
+          success: false,
+          status: 401,
+        });
+      } else {
+        req.user_id = decode.id
+        next();
+      }
+    });
+  } else {
+    next();
+  }
+};
+
 module.exports = auth;
