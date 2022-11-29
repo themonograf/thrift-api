@@ -21,7 +21,7 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
 
     includeCondition[0] = {model: model.productImage}
     if (resellerId > 0) {
-      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId}}
+      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
     }
 
     const { count, rows } = await model.product.findAndCountAll({
@@ -45,7 +45,7 @@ repository.getProductByslug = async function (slug, resellerId, callback) {
 
     includeCondition[0] = {model: model.productImage}
     if (resellerId > 0) {
-      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId}}
+      includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
     }
     const data = await model.product.findOne({
       where : {slug: slug},

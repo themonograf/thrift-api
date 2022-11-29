@@ -13,6 +13,7 @@ auth.checkToken = (req, res, next) => {
           status: 401,
         });
       } else {
+        req.user_id = decode.id
         next();
       }
     });
@@ -48,8 +49,10 @@ auth.checkRefreshToken = async (req, res, next) => {
               message: "Invalid token",
             });
           } else {
+            req.user_id = decode.id
             req.locales = {
               username: decode.username,
+              id: decode.id,
             };
             next();
           }

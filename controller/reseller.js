@@ -63,10 +63,10 @@ controller.loginReseller = async function (req, res) {
     if (result) {
       const username = results.username;
       results.password = undefined;
-      const accessToken = sign({ username }, process.env.JWT_KEY, {
+      const accessToken = sign({ username: username, id: results.id }, process.env.JWT_KEY, {
         expiresIn: "4h",
       });
-      const refreshToken = sign({ username }, process.env.JWT_KEY_REFRESH, {
+      const refreshToken = sign({ username: username, id: results.id }, process.env.JWT_KEY_REFRESH, {
         expiresIn: "8h",
       });
 
@@ -88,7 +88,7 @@ controller.loginReseller = async function (req, res) {
 
 controller.refreshTokenReseller = async function (req, res) {
   const errors = validationResult(req);
-  const { username } = req.locales;
+  const data = req.locales;
 
   if (!errors.isEmpty()) {
     return res.status(404).json({
@@ -98,10 +98,10 @@ controller.refreshTokenReseller = async function (req, res) {
     });
   }
 
-  const accessToken = sign({ username }, process.env.JWT_KEY, {
+  const accessToken = sign({ username: data.username, id: data.id }, process.env.JWT_KEY, {
     expiresIn: "4h",
   });
-  const refreshToken = sign({ username }, process.env.JWT_KEY_REFRESH, {
+  const refreshToken = sign({ username: data.username, id: data.id }, process.env.JWT_KEY_REFRESH, {
     expiresIn: "8h",
   });
   return res.status(200).json({
