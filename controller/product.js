@@ -14,10 +14,7 @@ controller.getAllProductCatalog = async function (req, res) {
   }
 
   var resellerId = 0
-  var userId = 0
-  if((req.user_id) && req.user_id > 0){
-    userId = req.user_id
-  }else{
+  if((!req.user_id) || req.user_id <= 0){
     if((req.get("reseller")) && req.get("reseller") != ""){
       await repository.reseller.getResellerByUsername(req.get("reseller"), (err, results) => {
         if (err) {
