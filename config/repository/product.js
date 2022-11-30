@@ -47,13 +47,13 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
   }
 };
 
-repository.getProductByslug = async function (slug, resellerId, callback) {
+repository.getProductByslug = async function (slug, resellerId, userId, callback) {
   try {
     includeCondition = []
 
     includeCondition[0] = {model: model.productImage}
-    if((req.user_id) && req.user_id > 0){
-      includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: false}
+    if((userId) && userId > 0){
+      includeCondition[1] = {model: model.productPrice, where: {resellerId: userId}, required: false}
     }else{
       if (resellerId > 0) {
         includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}

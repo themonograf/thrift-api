@@ -14,22 +14,27 @@ controller.getAllProductCatalog = async function (req, res) {
   }
 
   var resellerId = 0
-  if((req.get("reseller")) && req.get("reseller") != ""){
-    await repository.reseller.getResellerByUsername(req.get("reseller"), (err, results) => {
-      if (err) {
-        return res.status(404).json({
-          success: false,
-          message: err,
-        });
-      } else if (!results) {
-        return res.status(404).json({
-          success: false,
-          message: "Reseller Not Found",
-        });
-      } else {
-        resellerId = results.id
-      }
-    });
+  var userId = 0
+  if((req.user_id) && req.user_id > 0){
+    userId = req.user_id
+  }else{
+    if((req.get("reseller")) && req.get("reseller") != ""){
+      await repository.reseller.getResellerByUsername(req.get("reseller"), (err, results) => {
+        if (err) {
+          return res.status(404).json({
+            success: false,
+            message: err,
+          });
+        } else if (!results) {
+          return res.status(404).json({
+            success: false,
+            message: "Reseller Not Found",
+          });
+        } else {
+          resellerId = results.id
+        }
+      });
+    }
   }
 
   await repository.product.getAllProductCatalog(
@@ -60,25 +65,30 @@ controller.getProductByslug = async function (req, res) {
   }
 
   var resellerId = 0
-  if((req.get("reseller")) && req.get("reseller") != ""){
-    await repository.reseller.getResellerByUsername(req.get("reseller"), (err, results) => {
-      if (err) {
-        return res.status(404).json({
-          success: false,
-          message: err,
-        });
-      } else if (!results) {
-        return res.status(404).json({
-          success: false,
-          message: "Reseller Not Found",
-        });
-      } else {
-        resellerId = results.id
-      }
-    });
+  var userId = 0
+  if((req.user_id) && req.user_id > 0){
+    userId = req.user_id
+  }else{
+    if((req.get("reseller")) && req.get("reseller") != ""){
+      await repository.reseller.getResellerByUsername(req.get("reseller"), (err, results) => {
+        if (err) {
+          return res.status(404).json({
+            success: false,
+            message: err,
+          });
+        } else if (!results) {
+          return res.status(404).json({
+            success: false,
+            message: "Reseller Not Found",
+          });
+        } else {
+          resellerId = results.id
+        }
+      });
+    }
   }
 
-  await repository.product.getProductByslug(slug, resellerId, (err, results) => {
+  await repository.product.getProductByslug(slug, resellerId, userId, (err, results) => {
     if (err) {
       return res.status(404).json({
         success: false,
