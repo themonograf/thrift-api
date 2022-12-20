@@ -23,7 +23,7 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
     includeCondition[0] = {model: model.productImage}
     if((req.user_id) && req.user_id > 0){
       if(req.query.type=="catalog"){
-        const productPrices = model.productPrice.findAll({
+        await model.productPrice.findAll({
           attributes: ["productId"],
           group: ["productId"],
           where: {
@@ -31,7 +31,9 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
           }
         }).then(function (productPrice) {
           const productIds = productPrice.map(pPrice => pPrice.productId);
-          console.log(productIds)
+          queryCondition.id = {
+            [Op.notIn]: productIds
+          }
         });
         
       }else if(req.query.type=="reseller"){
@@ -46,7 +48,7 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
     }
 
     const offset = helper.getOffset(req.query.page, req.query.limit);
-
+    
     const { count, rows } = await model.product.findAndCountAll({
       distinct: true,
       where: queryCondition,
