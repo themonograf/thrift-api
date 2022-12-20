@@ -22,7 +22,23 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
 
     includeCondition[0] = {model: model.productImage}
     if((req.user_id) && req.user_id > 0){
-      includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: false}
+      if(req.query.type=="catalog"){
+        const productPrices = model.productPrice.findAll({
+          attributes: ["productId"],
+          group: ["productId"],
+          where: {
+            resellerId: {[Op.eq]:req.user_id}
+          }
+        }).then(function (productPrice) {
+          const productIds = productPrice.map(pPrice => pPrice.productId);
+          console.log(productIds)
+        });
+        
+      }else if(req.query.type=="reseller"){
+        includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: true}
+      }else{
+        includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: false}
+      }
     }else{
       if (resellerId > 0) {
         includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
@@ -38,11 +54,13 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
       offset,
       limit: parseInt(req.query.limit),
       order: [["name", "ASC"]],
-      include: includeCondition
+      include: includeCondition,
+      exclude: [{model: model.productPrice, where: {resellerId: req.user_id}, required: true}]
     });
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
+    console.log(error)
     return callback(error);
   }
 };
