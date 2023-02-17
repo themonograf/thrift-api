@@ -18,32 +18,42 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
       }
     }
 
+    var listProductId = []
+    await model.order.findAll({
+      attributes: ["productId"]
+    }).then(function (order) {
+      listProductId.push(...order.map(pOrder => pOrder.productId))
+    });
+
     includeCondition = []
 
     includeCondition[0] = {model: model.productImage}
     if((req.user_id) && req.user_id > 0){
       if(req.query.type=="catalog"){
-        await model.productPrice.findAll({
+        await model.productItem.findAll({
           attributes: ["productId"],
           group: ["productId"],
           where: {
             resellerId: {[Op.eq]:req.user_id}
           }
-        }).then(function (productPrice) {
-          const productIds = productPrice.map(pPrice => pPrice.productId);
-          queryCondition.id = {
-            [Op.notIn]: productIds
-          }
+        }).then(function (productItem) {
+          listProductId.push(...productItem.map(pPrice => pPrice.productId))
         });
         
       }else if(req.query.type=="reseller"){
-        includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: true}
+        includeCondition[1] = {model: model.productItem, where: {resellerId: req.user_id}, required: true}
       }else{
-        includeCondition[1] = {model: model.productPrice, where: {resellerId: req.user_id}, required: false}
+        includeCondition[1] = {model: model.productItem, where: {resellerId: req.user_id}, required: false}
       }
     }else{
       if (resellerId > 0) {
-        includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
+        includeCondition[1] = {model: model.productItem, where: {resellerId: resellerId, enable: true}}
+      }
+    }
+
+    if(listProductId.length > 0){
+      queryCondition.id = {
+        [Op.notIn]: listProductId
       }
     }
 
@@ -57,7 +67,7 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
       limit: parseInt(req.query.limit),
       order: [["name", "ASC"]],
       include: includeCondition,
-      exclude: [{model: model.productPrice, where: {resellerId: req.user_id}, required: true}]
+      exclude: [{model: model.productItem, where: {resellerId: req.user_id}, required: true}]
     });
 
     return callback(null, { total: count, data: rows });
@@ -73,14 +83,29 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
 
     includeCondition[0] = {model: model.productImage}
     if((userId) && userId > 0){
-      includeCondition[1] = {model: model.productPrice, where: {resellerId: userId}, required: false}
+      includeCondition[1] = {model: model.productItem, where: {resellerId: userId}, required: false}
     }else{
       if (resellerId > 0) {
-        includeCondition[1] = {model: model.productPrice, where: {resellerId: resellerId, enable: true}}
+        includeCondition[1] = {model: model.productItem, where: {resellerId: resellerId, enable: true}}
       }
     }
+
+    var queryCondition = {}
+    queryCondition.slug = {
+        [Op.eq]: slug
+    }
+
+    await model.order.findAll({
+      attributes: ["productId"]
+    }).then(function (order) {
+      const productIds = order.map(pOrder => pOrder.productId)
+      queryCondition.id = {
+        [Op.notIn]: productIds
+      }
+    });
+
     const data = await model.product.findOne({
-      where : {slug: slug},
+      where : queryCondition,
       include: includeCondition,
     });
     return callback(null, data);

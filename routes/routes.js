@@ -125,9 +125,9 @@ const listRoutes = {
       method: "post",
       middleware: [
         middleware.auth.checkToken,
-        middleware.productPrice.validate("createUpdateProductPrice")
+        middleware.productItem.validate("createUpdateProductItem")
       ],
-      controllerModel: controller.productPrice.createUpdateProductPrice,
+      controllerModel: controller.productItem.createUpdateProductItem,
     },
     {
       route: "/product",

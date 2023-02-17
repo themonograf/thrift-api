@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize")
 const productImage = require("./product_image")
-const productPrice = require("./product_price")
+const productItem = require("./product_item")
 const db = require("../database/database")
 
 var product = db.define('product',{
@@ -15,6 +15,6 @@ var product = db.define('product',{
 })
 
 product.hasMany(productImage)
-product.hasOne(productPrice)
+product.hasOne(productItem)
 
 module.exports = product

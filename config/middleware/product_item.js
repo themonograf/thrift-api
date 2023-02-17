@@ -3,7 +3,7 @@ const middleware = {};
 
 middleware.validate = (method) => {
   switch (method) {
-    case "createUpdateProductPrice": {
+    case "createUpdateProductItem": {
       return [
         body("product_id", "Product Id is required").notEmpty().exists().isInt(),
         body("price", "Price is required").notEmpty().exists().isInt(),

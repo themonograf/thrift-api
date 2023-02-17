@@ -2,12 +2,12 @@ const user = require("./user")
 const productCategory = require("./product_category")
 const product = require("./product")
 const reseller = require("./reseller")
-const productPrice = require("./product_price")
+const productItem = require("./product_item")
 const repository = {}
 
 repository.user = user
 repository.productCategory = productCategory
 repository.product = product
 repository.reseller = reseller
-repository.productPrice = productPrice
+repository.productItem = productItem
 module.exports=repository
