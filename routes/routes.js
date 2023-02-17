@@ -121,7 +121,7 @@ const listRoutes = {
       controllerModel: controller.reseller.getResellerByUsername,
     },
     {
-      route: "/reseller/price",
+      route: "/reseller/item",
       method: "post",
       middleware: [
         middleware.auth.checkToken,
