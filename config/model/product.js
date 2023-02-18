@@ -10,6 +10,7 @@ var product = db.define('product',{
     productCategoryId: Sequelize.INTEGER,
     price: Sequelize.FLOAT,
     slug: Sequelize.STRING,
+    isSold: Sequelize.BOOLEAN,
 },{
     paranoid: true
 })

@@ -20,7 +20,10 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
 
     var listProductId = []
     await model.order.findAll({
-      attributes: ["productId"]
+      attributes: ["productId"],
+      where: {
+        status:2,
+      }
     }).then(function (order) {
       listProductId.push(...order.map(pOrder => pOrder.productId))
     });
@@ -96,7 +99,10 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
     }
 
     await model.order.findAll({
-      attributes: ["productId"]
+      attributes: ["productId"],
+      where: {
+        status:2,
+      }
     }).then(function (order) {
       const productIds = order.map(pOrder => pOrder.productId)
       queryCondition.id = {
