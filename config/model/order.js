@@ -8,7 +8,10 @@ var order = db.define('order',{
     customerName: Sequelize.STRING,
     customerPhonenumber: Sequelize.STRING,
     customerAddress: Sequelize.STRING,
-    sell_price: Sequelize.FLOAT,
+    basicPrice: Sequelize.FLOAT,
+    sellPrice: Sequelize.FLOAT,
+    resellerCommision: Sequelize.FLOAT,
+    status: Sequelize.TINYINT,
 })
 
 module.exports = order
