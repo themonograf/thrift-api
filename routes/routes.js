@@ -130,6 +130,15 @@ const listRoutes = {
       controllerModel: controller.productItem.createUpdateProductItem,
     },
     {
+      route: "/reseller/order",
+      method: "post",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.order.validate("createOrderCatalog")
+      ],
+      controllerModel: controller.order.createOrderCatalog,
+    },
+    {
       route: "/product",
       method: "get",
       middleware: [

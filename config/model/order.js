@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize")
-const db = require("../database/database")
+const conn = require("../database/database")
 
-var order = db.define('order',{
+var order = conn.db.define('order',{
     productId: Sequelize.INTEGER,
     typeSale: Sequelize.TINYINT,
     resellerId: Sequelize.INTEGER,

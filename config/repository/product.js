@@ -120,4 +120,13 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
   }
 };
 
+repository.getProductById = async function (productId, callback) {
+  try {
+    const data = await model.product.findByPk(productId)
+    return callback(null, data)
+  } catch (error) {
+    return callback(error)
+  }
+}
+
 module.exports = repository;

@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize")
-const db = require("../database/database")
+const conn = require("../database/database")
 
-var user = db.define('user',{
+var user = conn.db.define('user',{
     name: Sequelize.STRING,
     username: Sequelize.STRING,
     password: Sequelize.STRING

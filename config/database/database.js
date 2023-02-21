@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize")
+const conn = {}
 const db = new Sequelize(
     process.env.DB_DATABASE,
     process.env.DB_USERNAME,
@@ -13,4 +14,7 @@ const db = new Sequelize(
     }
 )
 
-module.exports = db
+conn.Sequelize = Sequelize
+conn.db = db
+
+module.exports = conn

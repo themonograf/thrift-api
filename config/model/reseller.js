@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize")
-const db = require("../database/database")
+const conn = require("../database/database")
 
-var reseller = db.define('resellers',{
+var reseller = conn.db.define('resellers',{
     name: Sequelize.STRING,
     address: Sequelize.STRING,
     email: Sequelize.STRING,
@@ -11,6 +11,7 @@ var reseller = db.define('resellers',{
     instagram: Sequelize.STRING,
     username: Sequelize.STRING,
     password: Sequelize.STRING,
+    isAdmin: Sequelize.BOOLEAN,
 },{
     paranoid: true
 })

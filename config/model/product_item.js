@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize")
-const db = require("../database/database")
+const conn = require("../database/database")
 
-var productItem = db.define('product_item',{
+var productItem = conn.db.define('product_item',{
     productId: Sequelize.INTEGER,
     resellerId: Sequelize.INTEGER,
     price: Sequelize.FLOAT,
