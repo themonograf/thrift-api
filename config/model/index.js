@@ -5,6 +5,7 @@ const productImage = require("./product_image")
 const productItem = require("./product_item")
 const reseller = require("./reseller")
 const order = require("./order")
+const masterImage = require("./master_image")
 const model = {}
 
 model.user = user
@@ -14,4 +15,5 @@ model.productImage = productImage
 model.productItem = productItem
 model.reseller = reseller
 model.order = order
+model.masterImage = masterImage
 module.exports = model

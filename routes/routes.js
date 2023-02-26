@@ -177,6 +177,23 @@ const listRoutes = {
       ],
       controllerModel: controller.reseller.refreshTokenReseller,
     },
+  ],
+  upload: [
+    {
+      route: "/",
+      method: "post",
+      middleware: [],
+      controllerModel: controller.upload.uploadSingle,
+    },
+    {
+      route: "/bulk",
+      method: "post",
+      middleware: [
+        // middleware.auth.checkToken,
+        // middleware.productItem.validate("createUpdateProductItem")
+      ],
+      controllerModel: controller.upload.uploadMultiple,
+    },
   ]
 };
 

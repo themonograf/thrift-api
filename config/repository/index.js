@@ -4,6 +4,7 @@ const product = require("./product")
 const reseller = require("./reseller")
 const productItem = require("./product_item")
 const order = require("./order")
+const masterImage = require("./master_image")
 const repository = {}
 
 repository.user = user
@@ -12,4 +13,5 @@ repository.product = product
 repository.reseller = reseller
 repository.productItem = productItem
 repository.order = order
+repository.masterImage = masterImage
 module.exports=repository
