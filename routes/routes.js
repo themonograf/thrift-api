@@ -182,15 +182,16 @@ const listRoutes = {
     {
       route: "/",
       method: "post",
-      middleware: [],
+      middleware: [
+        middleware.auth.checkToken,
+      ],
       controllerModel: controller.upload.uploadSingle,
     },
     {
       route: "/bulk",
       method: "post",
       middleware: [
-        // middleware.auth.checkToken,
-        // middleware.productItem.validate("createUpdateProductItem")
+        middleware.auth.checkToken,
       ],
       controllerModel: controller.upload.uploadMultiple,
     },
