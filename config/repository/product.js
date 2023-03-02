@@ -198,6 +198,7 @@ repository.getAllProduct = async function (req, callback) {
       offset: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
       order: [["updatedAt", "DESC"]],
+      include : [{model: model.productImage}],
     });
 
     return callback(null, { total: count, data: rows });
