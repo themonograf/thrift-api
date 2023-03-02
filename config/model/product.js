@@ -14,11 +14,17 @@ var product = conn.db.define('product',{
     minLivePrice: Sequelize.FLOAT,
     slug: Sequelize.STRING,
     isSold: Sequelize.BOOLEAN,
+    code: Sequelize.STRING,
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true 
+    },
 },{
     paranoid: true
 })
 
-product.hasMany(productImage)
+product.hasMany(productImage, {foreignKey:'productId'})
 product.hasOne(productItem)
 
 module.exports = product

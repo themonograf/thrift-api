@@ -113,6 +113,64 @@ const listRoutes = {
       controllerModel: controller.productCategory.deleteProductCategory,
     },
   ],
+  product: [
+    {
+      route: "/",
+      method: "post",
+      middleware: [
+        // middleware.auth.checkToken,
+        middleware.product.validate("createProduct"),
+      ],
+      controllerModel: controller.product.createProduct,
+    },
+    {
+      route: "/",
+      method: "put",
+      middleware: [
+        // middleware.auth.checkToken,
+        middleware.product.validate("updateProduct"),
+      ],
+      controllerModel: controller.product.updateProduct,
+    },
+    {
+      route: "/",
+      method: "get",
+      middleware: [
+        // middleware.auth.checkToken,
+        middleware.product.validate("getAllProduct"),
+      ],
+      controllerModel: controller.product.getAllProduct,
+    },
+    {
+      route: "/:id",
+      method: "get",
+      middleware: [
+        // middleware.auth.checkToken,
+        middleware.product.validate("getProductById"),
+      ],
+      controllerModel: controller.product.getProductById,
+    },
+    {
+      route: "/:id",
+      method: "delete",
+      middleware: [
+        // middleware.auth.checkToken,
+        middleware.product.validate("deleteProduct"),
+      ],
+      controllerModel: controller.product.deleteProduct,
+    },
+  ],
+  product_image: [
+    {
+      route: "/:id",
+      method: "delete",
+      middleware: [
+        // middleware.auth.checkToken,
+        middleware.productImage.validate("deleteProductImage"),
+      ],
+      controllerModel: controller.productImage.deleteProductImage,
+    },
+  ],
   catalog: [
     {
       route: "/reseller",

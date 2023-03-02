@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const model = require("../model/index");
 const helper = require("../../helper/helper");
+const conn = require("../database/database")
 const repository = {};
 
 repository.getAllProductCatalog = async function (req, resellerId, callback) {
@@ -122,11 +123,107 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
 
 repository.getProductById = async function (productId, callback) {
   try {
-    const data = await model.product.findByPk(productId)
+    const data = await model.product.findByPk(productId, {
+      include : [{model: model.productImage}]
+    })
     return callback(null, data)
   } catch (error) {
     return callback(error)
   }
 }
+
+repository.createProduct = async function (product, dataProductImage, masterImage, callback) {
+  const t = await conn.db.transaction()
+  try {
+    const newProduct = await model.product.create(product, {transaction:t})
+
+    productImage = dataProductImage.map(({image, is_primary}) => ({image: image, isPrimary : is_primary, productId:newProduct.id}))
+    
+    await model.productImage.bulkCreate(productImage, {transaction:t});
+    
+    await model.masterImage.masterImage.update({isTaken: true}, {where : {image : {
+      [Op.in]: masterImage
+    }}}, {transaction:t});
+
+    await t.commit();
+
+    return callback(null);
+  } catch (error) {
+    await t.rollback();
+    return callback(error.message);
+  }
+};
+
+repository.updateProduct = async function (product, productImage, masterImageTaken, masterImageDestroy, callback) {
+  const t = await conn.db.transaction()
+  try {
+    const newProduct = await model.product.update(product, {where: {id:product.id}}, {transaction:t})
+
+    productImage.map(async (obj) => {
+      let arr = {
+        id: obj.id,
+        image: obj.image,
+        isPrimary: obj.is_primary,
+        productId: product.id
+      }
+
+      await model.productImage.upsert(arr, {transaction:t})
+    })
+
+    await model.masterImage.masterImage.update({isTaken: true}, {where : {image : {
+      [Op.in]: masterImageTaken
+    }}}, {transaction:t});
+
+    if(masterImageDestroy.length > 0){
+      await model.masterImage.masterImage.update({isTaken: false}, {where : {image : {
+        [Op.in]: masterImageDestroy
+      }}}, {transaction:t});
+    }
+
+    await t.commit();
+
+    return callback(null);
+  } catch (error) {
+    await t.rollback();
+    return callback(error.message);
+  }
+};
+
+repository.getAllProduct = async function (req, callback) {
+  try {
+    const { count, rows } = await model.product.findAndCountAll({
+      where: {
+        name: { [Op.like]: "%" + req.query.keyword + "%" },
+      },
+      offset: parseInt(req.query.page),
+      limit: parseInt(req.query.limit),
+      order: [["updatedAt", "DESC"]],
+    });
+
+    return callback(null, { total: count, data: rows });
+  } catch (error) {
+    return callback(error);
+  }
+};
+
+repository.deleteProduct = async function (id, masterImageDestroy, callback) {
+  const t = await conn.db.transaction()
+  try {
+    await model.product.destroy({where: { id:id }}, {transaction:t});
+
+    if(masterImageDestroy.length > 0){
+      await model.masterImage.masterImage.update({isTaken: false}, {where : {image : {
+        [Op.in]: masterImageDestroy
+      }}}, {transaction:t});
+    }
+
+    await t.commit();
+
+    return callback(null);
+  } catch (error) {
+    await t.rollback();
+    return callback(error.message);
+  }
+};
 
 module.exports = repository;

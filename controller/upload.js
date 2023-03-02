@@ -14,7 +14,7 @@ controller.uploadSingle = async (req, res) => {
             await createMasterImage(req.file)
         } catch (error) {
             if(error) {
-                return res.json({
+                return res.status(400).json({
                     success: false,
                     message: error.message
                 })
@@ -40,7 +40,7 @@ controller.uploadMultiple = async (req, res) => {
 
         } catch (error) {
             if(error) {
-                return res.json({
+                return res.status(404).json({
                     success: false,
                     message: error.message
                 })

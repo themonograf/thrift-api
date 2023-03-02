@@ -1,4 +1,4 @@
-const { param, query } = require("express-validator");
+const { body, param, query } = require("express-validator");
 const middleware = {};
 
 middleware.validate = (method) => {
@@ -11,6 +11,41 @@ middleware.validate = (method) => {
     }
     case "getProductBySlug": {
       return [param("slug", "Slug is required").notEmpty().exists()];
+    }
+    case "createProduct": {
+      return [
+        body("product_category_id", "Category is required").notEmpty().exists().isInt(),
+        body("name", "Name is required").notEmpty().exists(),
+        body("variant", "Variant is required").notEmpty().exists(),
+        body("prefix", "Prefix Code is required").notEmpty().exists(),
+        body("description", "Description is required").notEmpty().exists(),
+        body("basic_price", "Basic Price is required").notEmpty().exists().isInt(),
+        body("catalog_price", "Catalog Price is required").notEmpty().exists().isInt(),
+        body("olshop_price", "Olshop Price is required").notEmpty().exists().isInt(),
+        body("min_live_price", "Min Live Price is required").notEmpty().exists().isInt(),
+        body("product_image", "Product Image is required").isArray({min:1}).notEmpty().exists(),
+      ];
+    }
+    case "updateProduct": {
+      return [
+        body("id", "Id is required").notEmpty().exists().isInt(),
+        body("product_category_id", "Category is required").notEmpty().exists().isInt(),
+        body("name", "Name is required").notEmpty().exists(),
+        body("variant", "Variant is required").notEmpty().exists(),
+        body("prefix", "Prefix Code is required").notEmpty().exists(),
+        body("description", "Description is required").notEmpty().exists(),
+        body("basic_price", "Basic Price is required").notEmpty().exists().isInt(),
+        body("catalog_price", "Catalog Price is required").notEmpty().exists().isInt(),
+        body("olshop_price", "Olshop Price is required").notEmpty().exists().isInt(),
+        body("min_live_price", "Min Live Price is required").notEmpty().exists().isInt(),
+        body("product_image", "Product Image is required").isArray({min:1}).notEmpty().exists(),
+      ];
+    }
+    case "getProductById": {
+      return [param("id", "Id is required").notEmpty().exists()];
+    }
+    case "deleteProduct": {
+      return [param("id", "Id is required").notEmpty().exists()];
     }
   }
 };

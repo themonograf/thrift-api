@@ -8,6 +8,8 @@ const authRouter = require("./routes/auth");
 const productCategory = require("./routes/product_category");
 const upload = require("./routes/upload");
 const catalog = require("./routes/catalog");
+const product = require("./routes/product");
+const productImage = require("./routes/product_image");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,8 +23,10 @@ app.use(
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/product-category", productCategory);
+app.use("/api/product", product);
 app.use("/api/upload", upload);
 app.use("/api/catalog", catalog);
+app.use("/api/product-image", productImage);
 
 app.listen(process.env.APP_PORT, () => {
   console.log("server is running");
