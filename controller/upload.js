@@ -36,7 +36,7 @@ controller.uploadMultiple = async (req, res) => {
                 throw new Error(err.message)
             }
 
-            await createMasterImage(req.files)
+            await createMasterImage(req.files, req.body.type)
 
         } catch (error) {
             if(error) {
@@ -54,12 +54,13 @@ controller.uploadMultiple = async (req, res) => {
     });
 }
 
-const createMasterImage = async (data) => {
+const createMasterImage = async (data, type) => {
     let dataMasterImage = []
     if(data.length > 0){
         data.forEach((obj, _) => {
             const array = {
                 image: process.env.URL_CDN + obj.path,
+                category: type,
                 isTaken: false,
             }
     
@@ -68,6 +69,7 @@ const createMasterImage = async (data) => {
     }else{
         const array = {
             image: process.env.URL_CDN + data.path,
+            category: type,
             isTaken: false,
         }
 
