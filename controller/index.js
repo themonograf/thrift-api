@@ -6,6 +6,7 @@ const productItem = require("./product_item")
 const order = require("./order")
 const upload = require("./upload")
 const productImage = require("./product_image")
+const masterImage = require("./master_image")
 const controller = {}
 
 controller.user = user
@@ -16,4 +17,5 @@ controller.productItem = productItem
 controller.order = order
 controller.upload = upload
 controller.productImage = productImage
+controller.masterImage = masterImage
 module.exports=controller

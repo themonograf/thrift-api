@@ -171,6 +171,17 @@ const listRoutes = {
       controllerModel: controller.productImage.deleteProductImage,
     },
   ],
+  master_image: [
+    {
+      route: "/:category",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.masterImage.validate("getSelectMasterImage"),
+      ],
+      controllerModel: controller.masterImage.getSelectMasterImage,
+    },
+  ],
   catalog: [
     {
       route: "/reseller",
