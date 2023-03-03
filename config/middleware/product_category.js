@@ -6,13 +6,11 @@ middleware.validate = (method) => {
     case "createProductCategory": {
       return [
         body("category", "Category is required").notEmpty().exists(),
-        body("image", "Image is required").notEmpty().exists(),
       ];
     }
     case "updateProductCategory": {
       return [
         body("category", "Category is required").notEmpty().exists(),
-        body("image", "Image is required").notEmpty().exists(),
         body("id", "Id is required").notEmpty().exists(),
       ];
     }

@@ -77,6 +77,14 @@ const listRoutes = {
       controllerModel: controller.productCategory.getAllProductCategory,
     },
     {
+      route: "/select-box",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+      ],
+      controllerModel: controller.productCategory.getSelectProductCategory,
+    },
+    {
       route: "/:id",
       method: "get",
       middleware: [

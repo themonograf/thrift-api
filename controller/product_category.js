@@ -12,7 +12,7 @@ controller.createProductCategory = async function (req, res) {
     });
   }
 
-  repository.productCategory.createProductCategory(req, (err) => {
+  await repository.productCategory.createProductCategory(req, (err) => {
     if (err) {
       return res.status(404).json({
         success: false,
@@ -35,18 +35,45 @@ controller.updateProductCategory = async function (req, res) {
     });
   }
 
-  repository.productCategory.updateProductCategory(req, (err) => {
+  let dataProductCategory = {}
+  await repository.productCategory.getProductCategoryById(req.body.id, (err, results) => {
     if (err) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: err,
       });
+    } else if (!results) {
+      return res.status(404).json({
+        success: false,
+        message: "Product Category Not Found",
+      });
+    } else {
+      dataProductCategory = results
     }
-    return res.json({
-      success: true,
-      data: [],
-    });
   });
+
+  var masterImage = {}
+  if(dataProductCategory.image != req.body.image){
+    masterImage = {
+      imageTaken : req.body.image,
+      imageDestroy : dataProductCategory.image
+    }
+  }
+
+  if(dataProductCategory.id > 0){
+    await repository.productCategory.updateProductCategory(req, masterImage, (err) => {
+      if (err) {
+        return res.status(404).json({
+          success: false,
+          message: err,
+        });
+      }
+      return res.json({
+        success: true,
+        data: [],
+      });
+    });
+  }
 };
 
 controller.deleteProductCategory = async function (req, res) {
@@ -58,18 +85,37 @@ controller.deleteProductCategory = async function (req, res) {
     });
   }
 
-  repository.productCategory.deleteProductCategory(req, (err) => {
+  let dataProductCategory = {}
+  await repository.productCategory.getProductCategoryById(req.params.id, (err, results) => {
     if (err) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: err,
       });
+    } else if (!results) {
+      return res.status(404).json({
+        success: false,
+        message: "Product Category Not Found",
+      });
+    } else {
+      dataProductCategory = results
     }
-    return res.json({
-      success: true,
-      data: [],
-    });
   });
+
+  if(dataProductCategory.id > 0){
+    repository.productCategory.deleteProductCategory(dataProductCategory, (err) => {
+      if (err) {
+        return res.status(404).json({
+          success: false,
+          message: err,
+        });
+      }
+      return res.json({
+        success: true,
+        data: [],
+      });
+    });
+  }
 };
 
 controller.getAllProductCategory = async function (req, res) {
@@ -144,6 +190,21 @@ controller.getAllProductCategoryCatalog = async function (req, res) {
       });
     }
   );
+};
+
+controller.getSelectProductCategory = async function (req, res) {
+  repository.productCategory.getAllProductCategoryCatalog(req, (err, result) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    }
+    return res.json({
+      success: true,
+      data: result,
+    });
+  });
 };
 
 module.exports = controller;
