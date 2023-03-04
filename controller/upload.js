@@ -11,7 +11,7 @@ controller.uploadSingle = async (req, res) => {
                 throw new Error(err.message)
             }
 
-            await createMasterImage(req.file)
+            await createMasterImage(req.file, req.body.type)
         } catch (error) {
             if(error) {
                 return res.status(400).json({
@@ -59,7 +59,8 @@ const createMasterImage = async (data, type) => {
     if(data.length > 0){
         data.forEach((obj, _) => {
             const array = {
-                image: process.env.URL_CDN + obj.path,
+                path: process.env.URL_CDN + "/image?category=" + type + '&image=' + obj.originalname,
+                image: obj.originalname,
                 category: type,
                 isTaken: false,
             }
@@ -68,7 +69,8 @@ const createMasterImage = async (data, type) => {
         });
     }else{
         const array = {
-            image: process.env.URL_CDN + data.path,
+            path: process.env.URL_CDN + "/image?category=" + type + '&image=' + data.originalname,
+            image: data.originalname,
             category: type,
             isTaken: false,
         }

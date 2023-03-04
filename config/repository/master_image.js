@@ -14,7 +14,7 @@ repository.createMasterImage = async function (data, callback) {
 repository.getSelectMasterImage = async function (category, callback) {
   try {
     const data = await model.masterImage.masterImage.findAll({
-      attributes: [['image', 'key'], ['SUBSTRING_INDEX(image, "/", -1)', 'value']],
+      attributes: [['path', 'key'], ['image', 'value']],
       where: {
         category: category,
         isTaken: false,
