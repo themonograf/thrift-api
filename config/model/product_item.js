@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize")
 const conn = require("../database/database")
+const product = require("./product")
 
 var productItem = conn.db.define('product_item',{
     productId: Sequelize.INTEGER,
@@ -11,5 +12,7 @@ var productItem = conn.db.define('product_item',{
     shopee: Sequelize.STRING,
     link: Sequelize.STRING,
 })
+
+// productItem.hasOne(product, {foreignKey:'productId'})
 
 module.exports = productItem

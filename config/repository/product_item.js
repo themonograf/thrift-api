@@ -50,4 +50,25 @@ repository.updateProductItem = async function (req, callback) {
   }
 };
 
+repository.getProductItemByReseller = async function (req, callback) {
+  try {
+    const { count, rows } = await model.product.findAndCountAll({
+      attributes: ['id','name','variant'],
+      where: {
+        isSold: false,
+        name: { [Op.like]: "%" + req.query.keyword + "%" }  
+      },
+      include: [{model: model.productItem, where: {resellerId: req.query.reseller_id}}],
+      offset: parseInt(req.query.page),
+      limit: parseInt(req.query.limit),
+      order: [["updatedAt", "DESC"]],
+    });
+
+    return callback(null, { total: count, data: rows });
+  } catch (error) {
+    console.log(error)
+    return callback(error);
+  }
+};
+
 module.exports = repository;

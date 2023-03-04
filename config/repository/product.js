@@ -190,11 +190,19 @@ repository.updateProduct = async function (product, productImage, masterImageTak
 };
 
 repository.getAllProduct = async function (req, callback) {
+  let condition = {}
+  if(req.query.keyword != "" && req.query.keyword != undefined){
+    condition.name = { [Op.like]: "%" + req.query.keyword + "%" }
+  }
+
+  if(req.query.is_sold != undefined){
+    const isSold = req.query.is_sold == "true" ? true : false;
+    condition.isSold = isSold
+  }
+
   try {
     const { count, rows } = await model.product.findAndCountAll({
-      where: {
-        name: { [Op.like]: "%" + req.query.keyword + "%" },
-      },
+      where: condition,
       offset: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
       order: [["updatedAt", "DESC"]],

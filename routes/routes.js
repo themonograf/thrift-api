@@ -190,6 +190,64 @@ const listRoutes = {
       controllerModel: controller.masterImage.getSelectMasterImage,
     },
   ],
+  reseller: [
+    {
+      route: "/",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.reseller.validate("getAllReseller"),
+      ],
+      controllerModel: controller.reseller.getAllReseller,
+    },
+    {
+      route: "/:id",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.reseller.validate("getResellerById"),
+      ],
+      controllerModel: controller.reseller.getResellerById,
+    },
+    {
+      route: "/",
+      method: "post",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.reseller.validate("createReseller"),
+      ],
+      controllerModel: controller.reseller.createReseller,
+    },
+    {
+      route: "/",
+      method: "put",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.reseller.validate("updateReseller"),
+      ],
+      controllerModel: controller.reseller.updateReseller,
+    },
+    {
+      route: "/:id",
+      method: "delete",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.reseller.validate("deleteReseller"),
+      ],
+      controllerModel: controller.reseller.deleteReseller,
+    },
+  ],
+  product_item: [
+    {
+      route: "/",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.productItem.validate("getProductItemByReseller"),
+      ],
+      controllerModel: controller.productItem.getProductItemByReseller,
+    },
+  ],
   catalog: [
     {
       route: "/reseller",

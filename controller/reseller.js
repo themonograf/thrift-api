@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const repository = require("../config/repository/index");
-const { compareSync } = require("bcrypt");
+const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sign, decode } = require("jsonwebtoken");
 
 const controller = {};
@@ -108,6 +108,164 @@ controller.refreshTokenReseller = async function (req, res) {
     accessToken,
     expiresAt: decode(accessToken, process.env.JWT_KEY)?.exp,
     refreshToken,
+  });
+};
+
+controller.createReseller = async function (req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(404).json({
+      success: false,
+      message: errors.array()[0].msg,
+    });
+  }
+
+  const salt = genSaltSync(10);
+  const password = hashSync(req.body.password, salt);
+
+  const reseller = {
+    name: req.body.name,
+    address: req.body.address,
+    email: req.body.email,
+    phoneNumber: req.body.phone_number,
+    tokopedia: req.body.tokopedia,
+    shopee: req.body.shopee,
+    instagram: req.body.instagram,
+    username: req.body.username,
+    password: password,
+    isAdmin: req.body.is_admin,
+  }
+
+  repository.reseller.createReseller(reseller, (err) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    }
+    return res.json({
+      success: true,
+      data: [],
+    });
+  });
+};
+
+controller.updateReseller = async function (req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(404).json({
+      success: false,
+      message: errors.array()[0].msg,
+    });
+  }
+
+  let reseller = {
+    id: req.body.id,
+    name: req.body.name,
+    address: req.body.address,
+    email: req.body.email,
+    phoneNumber: req.body.phone_number,
+    tokopedia: req.body.tokopedia,
+    shopee: req.body.shopee,
+    instagram: req.body.instagram,
+    username: req.body.username,
+    isAdmin: req.body.is_admin,
+  }
+
+  if(req.body.password != "" && req.body.password  != undefined){
+    const salt = genSaltSync(10);
+    reseller.password = hashSync(req.body.password, salt);
+  }
+
+  repository.reseller.updateReseller(reseller, (err) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    }
+    return res.json({
+      success: true,
+      data: [],
+    });
+  });
+};
+
+controller.deleteReseller = async function (req, res) {
+  const { id } = req.params
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(404).json({
+      success: false,
+      message: errors.array()[0].msg,
+    });
+  }
+
+  repository.reseller.deleteReseller(id, (err) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    }
+    return res.json({
+      success: true,
+      data: [],
+    });
+  });
+};
+
+controller.getAllReseller = async function (req, res) {
+  req.query.keyword = req.query.keyword || "";
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(404).json({
+      success: false,
+      message: errors.array()[0].msg,
+    });
+  }
+
+  repository.reseller.getAllReseller(req, (err, result) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    }
+    return res.json({
+      success: true,
+      data: result,
+    });
+  });
+};
+
+controller.getResellerById = async function (req, res) {
+  const { id } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(404).json({
+      success: false,
+      message: errors.array()[0].msg,
+    });
+  }
+
+  await repository.reseller.getResellerById(id, (err, results) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
+      });
+    } else if (!results) {
+      return res.status(404).json({
+        success: false,
+        message: "Data Not Found",
+      });
+    } else {
+      return res.json({
+        success: true,
+        data: results,
+      });
+    }
   });
 };
 

@@ -7,6 +7,7 @@ const productItem = require("./product_item")
 const order = require("./order")
 const productImage = require("./product_image")
 const masterImage = require("./master_image")
+const reseller = require("./reseller")
 
 const middleware = {}
 
@@ -19,5 +20,6 @@ middleware.productItem = productItem
 middleware.order = order
 middleware.productImage = productImage
 middleware.masterImage = masterImage
+middleware.reseller = reseller
 
 module.exports = middleware

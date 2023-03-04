@@ -11,6 +11,8 @@ const catalog = require("./routes/catalog");
 const product = require("./routes/product");
 const productImage = require("./routes/product_image");
 const masterImage = require("./routes/master_image");
+const reseller = require("./routes/reseller");
+const productItem = require("./routes/product_item");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -29,6 +31,8 @@ app.use("/api/upload", upload);
 app.use("/api/catalog", catalog);
 app.use("/api/product-image", productImage);
 app.use("/api/master-image", masterImage);
+app.use("/api/reseller", reseller);
+app.use("/api/product-item", productItem);
 
 app.listen(process.env.APP_PORT, () => {
   console.log("server is running");
