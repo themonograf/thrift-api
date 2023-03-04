@@ -13,6 +13,7 @@ const productImage = require("./routes/product_image");
 const masterImage = require("./routes/master_image");
 const reseller = require("./routes/reseller");
 const productItem = require("./routes/product_item");
+const order = require("./routes/order");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +34,7 @@ app.use("/api/product-image", productImage);
 app.use("/api/master-image", masterImage);
 app.use("/api/reseller", reseller);
 app.use("/api/product-item", productItem);
+app.use("/api/order", order);
 
 app.listen(process.env.APP_PORT, () => {
   console.log("server is running");

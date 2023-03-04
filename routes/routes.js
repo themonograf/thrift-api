@@ -201,6 +201,14 @@ const listRoutes = {
       controllerModel: controller.reseller.getAllReseller,
     },
     {
+      route: "/select-box",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+      ],
+      controllerModel: controller.reseller.getAllResellerSelectBox,
+    },
+    {
       route: "/:id",
       method: "get",
       middleware: [
@@ -330,7 +338,45 @@ const listRoutes = {
       ],
       controllerModel: controller.upload.uploadMultiple,
     },
-  ]
+  ],
+  order: [
+    {
+      route: "/",
+      method: "get",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.order.validate("getAllOrder"),
+      ],
+      controllerModel: controller.order.getAllOrder,
+    },
+    {
+      route: "/approve/:id",
+      method: "post",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.order.validate("changeStatusOrder"),
+      ],
+      controllerModel: controller.order.approveOrder,
+    },
+    {
+      route: "/success/:id",
+      method: "post",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.order.validate("changeStatusOrder"),
+      ],
+      controllerModel: controller.order.successOrder,
+    },
+    {
+      route: "/decline/:id",
+      method: "post",
+      middleware: [
+        middleware.auth.checkToken,
+        middleware.order.validate("changeStatusOrder"),
+      ],
+      controllerModel: controller.order.declineOrder,
+    },
+  ],
 };
 
 module.exports = listRoutes;

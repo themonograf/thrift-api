@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize")
 const conn = require("../database/database")
+const product = require("./product")
+const reseller = require("./reseller")
 
 var order = conn.db.define('order',{
     productId: Sequelize.INTEGER,
@@ -13,5 +15,8 @@ var order = conn.db.define('order',{
     resellerCommision: Sequelize.FLOAT,
     status: Sequelize.TINYINT,
 })
+
+order.belongsTo(product)
+order.belongsTo(reseller)
 
 module.exports = order

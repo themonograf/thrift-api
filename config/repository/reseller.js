@@ -74,4 +74,17 @@ repository.getAllReseller = async function (req, callback) {
   }
 };
 
+repository.getAllResellerSelectBox = async function (callback) {
+  try {
+    const data = await model.reseller.findAll({
+      attributes: ['id','name','username'],
+      order: [["name", "ASC"]],
+    });
+
+    return callback(null, data);
+  } catch (error) {
+    return callback(error);
+  }
+};
+
 module.exports = repository;

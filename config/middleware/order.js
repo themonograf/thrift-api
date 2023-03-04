@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+const { body, param, query } = require("express-validator");
 const middleware = {};
 
 middleware.validate = (method) => {
@@ -12,6 +12,15 @@ middleware.validate = (method) => {
         body("customer_address", "Customer Address is required").notEmpty().exists(),
         body("sell_price", "Price is required").notEmpty().exists().isInt({min:1}),
       ];
+    }
+    case "getAllOrder": {
+      return [
+        query("page", "Page is required").notEmpty().exists().isInt(),
+        query("limit", "Limit is required").notEmpty().exists().isInt(),
+      ];
+    }
+    case "changeStatusOrder": {
+      return [param("id", "Id is required").notEmpty().exists()];
     }
   }
 };
