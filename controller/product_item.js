@@ -12,33 +12,19 @@ controller.createUpdateProductItem = async function (req, res) {
     });
   }
 
-  if((req.body.id) && req.body.id > 0){
-    await repository.productItem.updateProductItem(req, (err) => {
-      if (err) {
-        return res.status(404).json({
-          success: false,
-          message: err,
-        });
-      }
-      return res.json({
-        success: true,
-        data: [],
+  req.body.resellerId = req.user_id
+  await repository.productItem.upsertProductItem(req, (err) => {
+    if (err) {
+      return res.status(404).json({
+        success: false,
+        message: err,
       });
+    }
+    return res.json({
+      success: true,
+      data: [],
     });
-  }else{
-    await repository.productItem.createProductItem(req, (err) => {
-      if (err) {
-        return res.status(404).json({
-          success: false,
-          message: err,
-        });
-      }
-      return res.json({
-        success: true,
-        data: [],
-      });
-    });
-  }
+  });
 };
 
 controller.getProductItemByReseller = async function (req, res) {

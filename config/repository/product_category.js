@@ -56,7 +56,6 @@ repository.deleteProductCategory = async function (productCategory, callback) {
 
     return callback(null);
   } catch (error) {
-    console.log(error)
     await t.rollback();
     return callback(error.message);
   }
@@ -92,7 +91,7 @@ repository.getAllProductCategoryCatalog = async function (req, callback) {
   req.query.keyword = req.query.keyword ?? ""
   try {
     const data = await model.productCategory.findAll({
-      attributes: [['id','id'],['category','category'],['image','image']],
+      attributes: ['id','category','image'],
       where: {
         category: { [Op.like]: "%" + req.query.keyword + "%" },
       },

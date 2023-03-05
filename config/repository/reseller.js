@@ -5,7 +5,7 @@ const repository = {};
 repository.getResellerByUsername = async function (username, callback) {
   try {
     const data = await model.reseller.findOne({
-      where : {username: username}
+      where : { username }
     });
     return callback(null, data);
   } catch (error) {
@@ -44,7 +44,7 @@ repository.updateReseller = async function (data, callback) {
 
 repository.deleteReseller = async function (id, callback) {
   try {
-    await model.reseller.destroy({where: {id:id}})
+    await model.reseller.destroy({where: {id}})
     return callback(null)
   } catch (error) {
     return callback(error)

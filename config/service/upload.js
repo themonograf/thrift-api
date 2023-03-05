@@ -22,7 +22,7 @@ service.uploads = multer({
         basepath: '/images',
         connection: service.ftpClient,
         destination: function(req, file, options, callback) {
-            return callback(null, path.join(options.basepath + '/' + req.body.type,file.originalname))
+            return callback(null, path.join(options.basepath + '/' + req.body.category,file.originalname))
         }
     }),
     limits: {
@@ -34,8 +34,8 @@ service.uploads = multer({
             return cb({message:'Please upload a Image'})
         }
 
-        if(req.body.type == "" || req.body.type === undefined || !masterImage.category.includes(req.body.type)){
-            return cb({message:'Type is required'})
+        if(req.body.category == "" || req.body.category === undefined || !masterImage.category.includes(req.body.category)){
+            return cb({message:'Category is required'})
         }
 
         cb(undefined, true)

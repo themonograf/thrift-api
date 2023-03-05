@@ -120,20 +120,22 @@ controller.createReseller = async function (req, res) {
     });
   }
 
+  const { name, address, email, phoneNumber, tokopedia, shopee, instagram, password, isAdmin } = req.body
+
   const salt = genSaltSync(10);
-  const password = hashSync(req.body.password, salt);
+  const newPassword = hashSync(password, salt);
 
   const reseller = {
-    name: req.body.name,
-    address: req.body.address,
-    email: req.body.email,
-    phoneNumber: req.body.phone_number,
-    tokopedia: req.body.tokopedia,
-    shopee: req.body.shopee,
-    instagram: req.body.instagram,
-    username: req.body.username,
-    password: password,
-    isAdmin: req.body.is_admin,
+    name,
+    address,
+    email,
+    phoneNumber,
+    tokopedia,
+    shopee,
+    instagram,
+    username,
+    password: newPassword,
+    isAdmin,
   }
 
   repository.reseller.createReseller(reseller, (err) => {
@@ -159,22 +161,24 @@ controller.updateReseller = async function (req, res) {
     });
   }
 
+  const { name, address, email, phoneNumber, tokopedia, shopee, instagram, isAdmin } = req.body
+
   let reseller = {
-    id: req.body.id,
-    name: req.body.name,
-    address: req.body.address,
-    email: req.body.email,
-    phoneNumber: req.body.phone_number,
-    tokopedia: req.body.tokopedia,
-    shopee: req.body.shopee,
-    instagram: req.body.instagram,
-    username: req.body.username,
-    isAdmin: req.body.is_admin,
+    id,
+    name,
+    address,
+    email,
+    phoneNumber,
+    tokopedia,
+    shopee,
+    instagram,
+    username,
+    isAdmin,
   }
 
-  if(req.body.password != "" && req.body.password  != undefined){
+  if(password != "" && password  != undefined){
     const salt = genSaltSync(10);
-    reseller.password = hashSync(req.body.password, salt);
+    reseller.password = hashSync(password, salt);
   }
 
   repository.reseller.updateReseller(reseller, (err) => {

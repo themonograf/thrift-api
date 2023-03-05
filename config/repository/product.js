@@ -13,9 +13,9 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
       }
     }
 
-    if (req.query.product_category_id) {
+    if (req.query.productCategoryId) {
       queryCondition.productCategoryId = {
-        [Op.eq]: req.query.product_category_id 
+        [Op.eq]: req.query.productCategoryId 
       }
     }
 
@@ -31,7 +31,7 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
 
     includeCondition = []
 
-    includeCondition[0] = {model: model.productImage}
+    includeCondition[0] = {model: model.productImage, as: 'productImage'}
     if((req.user_id) && req.user_id > 0){
       if(req.query.type=="catalog"){
         await model.productItem.findAll({
@@ -45,13 +45,13 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
         });
         
       }else if(req.query.type=="reseller"){
-        includeCondition[1] = {model: model.productItem, where: {resellerId: req.user_id}, required: true}
+        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: req.user_id}, required: true}
       }else{
-        includeCondition[1] = {model: model.productItem, where: {resellerId: req.user_id}, required: false}
+        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: req.user_id}, required: false}
       }
     }else{
       if (resellerId > 0) {
-        includeCondition[1] = {model: model.productItem, where: {resellerId: resellerId, enable: true}}
+        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: resellerId, enable: true}}
       }
     }
 
@@ -66,17 +66,15 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
     const { count, rows } = await model.product.findAndCountAll({
       distinct: true,
       where: queryCondition,
-      // offset: parseInt(req.query.page),
       offset,
       limit: parseInt(req.query.limit),
       order: [["name", "ASC"]],
       include: includeCondition,
-      exclude: [{model: model.productItem, where: {resellerId: req.user_id}, required: true}]
+      exclude: [{model: model.productItem, as: 'productItem', where: {resellerId: req.user_id}, required: true}]
     });
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
-    console.log(error)
     return callback(error);
   }
 };
@@ -85,12 +83,12 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
   try {
     includeCondition = []
 
-    includeCondition[0] = {model: model.productImage}
+    includeCondition[0] = {model: model.productImage, as: 'productImage'}
     if((userId) && userId > 0){
-      includeCondition[1] = {model: model.productItem, where: {resellerId: userId}, required: false}
+      includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: userId}, required: false}
     }else{
       if (resellerId > 0) {
-        includeCondition[1] = {model: model.productItem, where: {resellerId: resellerId, enable: true}}
+        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: resellerId, enable: true}}
       }
     }
 
@@ -124,7 +122,7 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
 repository.getProductById = async function (productId, callback) {
   try {
     const data = await model.product.findByPk(productId, {
-      include : [{model: model.productImage}]
+      include : [{model: model.productImage, as: 'productImage'}]
     })
     return callback(null, data)
   } catch (error) {
@@ -137,7 +135,7 @@ repository.createProduct = async function (product, dataProductImage, masterImag
   try {
     const newProduct = await model.product.create(product, {transaction:t})
 
-    productImage = dataProductImage.map(({image, is_primary}) => ({image: image, isPrimary : is_primary, productId:newProduct.id}))
+    productImage = dataProductImage.map(({image, isPrimary}) => ({image: image, isPrimary : isPrimary, productId:newProduct.id}))
     
     await model.productImage.bulkCreate(productImage, {transaction:t});
     
@@ -163,7 +161,7 @@ repository.updateProduct = async function (product, productImage, masterImageTak
       let arr = {
         id: obj.id,
         image: obj.image,
-        isPrimary: obj.is_primary,
+        isPrimary: obj.isPrimary,
         productId: product.id
       }
 
@@ -195,8 +193,8 @@ repository.getAllProduct = async function (req, callback) {
     condition.name = { [Op.like]: "%" + req.query.keyword + "%" }
   }
 
-  if(req.query.is_sold != undefined){
-    const isSold = req.query.is_sold == "true" ? true : false;
+  if(req.query.isSold != undefined){
+    const isSold = req.query.isSold == "true" ? true : false;
     condition.isSold = isSold
   }
 
@@ -206,7 +204,8 @@ repository.getAllProduct = async function (req, callback) {
       offset: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
       order: [["updatedAt", "DESC"]],
-      include : [{model: model.productImage}],
+      distinct: true,
+      include : [{model: model.productImage, as: "productImage"}],
     });
 
     return callback(null, { total: count, data: rows });
@@ -218,7 +217,7 @@ repository.getAllProduct = async function (req, callback) {
 repository.deleteProduct = async function (id, masterImageDestroy, callback) {
   const t = await conn.db.transaction()
   try {
-    await model.product.destroy({where: { id:id }}, {transaction:t});
+    await model.product.destroy({where: { id }}, {transaction:t});
 
     if(masterImageDestroy.length > 0){
       await model.masterImage.masterImage.update({isTaken: false}, {where : {image : {

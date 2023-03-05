@@ -144,7 +144,7 @@ const listRoutes = {
       route: "/",
       method: "get",
       middleware: [
-        middleware.auth.checkToken,
+        // middleware.auth.checkToken,
         middleware.product.validate("getAllProduct"),
       ],
       controllerModel: controller.product.getAllProduct,

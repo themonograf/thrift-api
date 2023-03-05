@@ -6,19 +6,19 @@ middleware.validate = (method) => {
     case "createReseller": {
       return [
         body("name", "Name is required").notEmpty().exists(),
-        body("phone_number", "Phone Number is required").notEmpty().exists(),
+        body("phoneNumber", "Phone Number is required").notEmpty().exists(),
         body("username", "Username is required").notEmpty().exists(),
         body("password", "Password is required").notEmpty().exists(),
-        body("is_admin", "Is Admin is required").notEmpty().exists().isBoolean(),
+        body("isAdmin", "Is Admin is required").notEmpty().exists().isBoolean(),
       ];
     }
     case "updateReseller": {
       return [
         body("id", "Id is required").notEmpty().exists(),
         body("name", "Name is required").notEmpty().exists(),
-        body("phone_number", "Phone Number is required").notEmpty().exists(),
+        body("phoneNumber", "Phone Number is required").notEmpty().exists(),
         body("username", "Username is required").notEmpty().exists(),
-        body("is_admin", "Is Admin is required").notEmpty().exists().isBoolean(),
+        body("isAdmin", "Is Admin is required").notEmpty().exists().isBoolean(),
       ];
     }
     case "deleteReseller": {

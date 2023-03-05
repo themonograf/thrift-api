@@ -2,12 +2,11 @@ const { Op } = require("sequelize");
 const model = require("../model/index");
 const repository = {};
 
-repository.createProductItem = async function (req, callback) {
+repository.upsertProductItem = async function (req, callback) {
   try {
-    resellerId = req.user_id
-    const { product_id, price, description, enable, tokopedia, shopee, link } = req.body;
-    const productId = product_id
-    await model.productItem.create({
+    const { id, productId, price, description, enable, tokopedia, shopee, link, resellerId } = req.body;
+    await model.productItem.upsert({
+      id,
       productId,
       resellerId,
       price,
@@ -23,33 +22,6 @@ repository.createProductItem = async function (req, callback) {
   }
 };
 
-repository.updateProductItem = async function (req, callback) {
-  try {
-    resellerId = req.user_id
-    const { id, product_id, price, description, enable, tokopedia, shopee, link } = req.body;
-    const productId = product_id
-    await model.productItem.update(
-      {
-        productId,
-        resellerId,
-        price,
-        description,
-        enable,
-        tokopedia, 
-        shopee, 
-        link,
-      },
-      {
-        where: { id },
-      }
-    );
-
-    return callback(null);
-  } catch (error) {
-    return callback(error);
-  }
-};
-
 repository.getProductItemByReseller = async function (req, callback) {
   try {
     const { count, rows } = await model.product.findAndCountAll({
@@ -58,7 +30,8 @@ repository.getProductItemByReseller = async function (req, callback) {
         isSold: false,
         name: { [Op.like]: "%" + req.query.keyword + "%" }  
       },
-      include: [{model: model.productItem, where: {resellerId: req.query.reseller_id}}],
+      distinct: true,
+      include: [{model: model.productItem, where: {resellerId: req.query.resellerId}}],
       offset: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
       order: [["updatedAt", "DESC"]],
@@ -66,7 +39,6 @@ repository.getProductItemByReseller = async function (req, callback) {
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
-    console.log(error)
     return callback(error);
   }
 };

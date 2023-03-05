@@ -3,22 +3,22 @@ const model = require("../model/index");
 const repository = {};
 
 repository.createOrder = async function (req, callback) {
-  const { product_id, type_sale, customer_name, customer_phonenumber, customer_address, sell_price, basic_price, reseller_commision } = req.body;
+  const { productId, typeSale, customerName, customerPhonenumber, customerAddress, sellPrice, basicPrice, resellerCommision, status, resellerId } = req.body;
   const t = await conn.db.transaction()
   try {
-    await model.product.update({isSold:true}, {where: {id:req.body.product_id}}, {transaction:t})
+    await model.product.update({isSold:true}, {where: {id:req.body.productId}}, {transaction:t})
 
     await model.order.create({
-      productId : product_id,
-      typeSale : type_sale,
-      resellerId : req.user_id,
-      customerName : customer_name,
-      customerPhonenumber : customer_phonenumber,
-      customerAddress : customer_address,
-      basicPrice : basic_price,
-      sellPrice : sell_price,
-      resellerCommision : reseller_commision,
-      status : 1,
+      productId,
+      typeSale,
+      customerName,
+      customerPhonenumber,
+      customerAddress,
+      basicPrice,
+      sellPrice,
+      resellerCommision,
+      status,
+      resellerId,
     }, {transaction:t});
 
     await t.commit();
@@ -32,8 +32,8 @@ repository.createOrder = async function (req, callback) {
 
 repository.getAllOrder = async function (req, callback) {
   let condition = {}
-  if(req.query.reseller_id != "" && req.query.reseller_id != undefined){
-    condition.resellerId = req.query.reseller_id
+  if(req.query.resellerId != "" && req.query.resellerId != undefined){
+    condition.resellerId = req.query.resellerId
   }
 
   if(req.query.status != undefined && req.query.status > 0){
@@ -45,6 +45,7 @@ repository.getAllOrder = async function (req, callback) {
       offset: parseInt(req.query.page),
       limit: parseInt(req.query.limit),
       order: [["status", "ASC"], ["updatedAt", "DESC"]],
+      distinct: true,
       include : [{model: model.product}, {model: model.reseller}]
     });
 

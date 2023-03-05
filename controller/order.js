@@ -14,7 +14,7 @@ controller.createOrderCatalog = async function (req, res) {
 
   let dataProduct = {}
 
-  await repository.product.getProductById(req.body.product_id, (err, results) => {
+  await repository.product.getProductById(req.body.productId, (err, results) => {
     if (err) {
       return res.status(404).json({
         success: false,
@@ -30,15 +30,15 @@ controller.createOrderCatalog = async function (req, res) {
     }
   });
 
-  if(req.body.type_sale == 2){
-    if(req.body.sell_price < dataProduct.price - 2000){
+  if(req.body.typeSale == 2){
+    if(req.body.sellPrice < dataProduct.catalogPrice - 2000){
       return res.json({
         success: false,
         message: "Insufict Sell Price",
       });
     }
   }else{
-    if(req.body.sell_price < dataProduct.price){
+    if(req.body.sellPrice < dataProduct.catalogPrice){
       return res.json({
         success: false,
         message: "Insufict Sell Price",
@@ -46,12 +46,14 @@ controller.createOrderCatalog = async function (req, res) {
     } 
   }
 
-  req.body.reseller_commision = 0
-  if(req.body.type_sale == 1){
-    req.body.reseller_commision = req.body.sell_price - dataProduct.price
+  req.body.resellerCommision = 0
+  if(req.body.typeSale == 1){
+    req.body.resellerCommision = req.body.sellPrice - dataProduct.catalogPrice
   }
 
-  req.body.basic_price = dataProduct.basicPrice
+  req.body.basicPrice = dataProduct.basicPrice
+  req.body.resellerId = req.user_id
+  req.body.status = 1
 
   await repository.order.createOrder(req, (err) => {
     if (err) {

@@ -1,4 +1,3 @@
-const { Op } = require("sequelize");
 const model = require("../model/index");
 const repository = {};
 
