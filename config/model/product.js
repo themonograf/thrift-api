@@ -25,6 +25,6 @@ var product = conn.db.define('product',{
 })
 
 product.hasMany(productImage, {foreignKey:'productId', as: "productImage"})
-product.hasOne(productItem, {as: "productItem"})
+product.hasOne(productItem, {foreignKey:'productId', as: "productItem"})
 
 module.exports = product

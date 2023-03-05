@@ -45,13 +45,13 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
         });
         
       }else if(req.query.type=="reseller"){
-        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: req.user_id}, required: true}
+        includeCondition[1] = {model: model.productItem, as: "productItem", where: {resellerId: req.user_id}, required: true}
       }else{
-        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: req.user_id}, required: false}
+        includeCondition[1] = {model: model.productItem, as: "productItem", where: {resellerId: req.user_id}, required: false}
       }
     }else{
       if (resellerId > 0) {
-        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: resellerId, enable: true}}
+        includeCondition[1] = {model: model.productItem, as: "productItem", where: {resellerId: resellerId, enable: true}}
       }
     }
 
@@ -70,11 +70,12 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
       limit: parseInt(req.query.limit),
       order: [["name", "ASC"]],
       include: includeCondition,
-      exclude: [{model: model.productItem, as: 'productItem', where: {resellerId: req.user_id}, required: true}]
+      exclude: [{model: model.productItem, as: "productItem", where: {resellerId: req.user_id}, required: true}]
     });
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
+    console.log(error)
     return callback(error);
   }
 };
@@ -85,10 +86,10 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
 
     includeCondition[0] = {model: model.productImage, as: 'productImage'}
     if((userId) && userId > 0){
-      includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: userId}, required: false}
+      includeCondition[1] = {model: model.productItem, where: {resellerId: userId}, required: false}
     }else{
       if (resellerId > 0) {
-        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: resellerId, enable: true}}
+        includeCondition[1] = {model: model.productItem, where: {resellerId: resellerId, enable: true}}
       }
     }
 
