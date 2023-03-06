@@ -189,7 +189,7 @@ controller.updateProduct = async function (req, res) {
     description,
     productCategoryId,
     basicPrice,
-    price,
+    catalogPrice,
     olshopPrice,
     minLivePrice,
     slug: slug,
