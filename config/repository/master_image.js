@@ -1,4 +1,5 @@
 const model = require("../model/index");
+const log = require("../service/log")
 const repository = {};
 
 repository.createMasterImage = async function (data, callback) {
@@ -6,6 +7,7 @@ repository.createMasterImage = async function (data, callback) {
     await model.masterImage.masterImage.bulkCreate(data);
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -23,7 +25,7 @@ repository.getSelectMasterImage = async function (category, callback) {
 
     return callback(null, data);
   } catch (error) {
-    console.log(error)
+    log.logger.error(error);
     return callback(error);
   }
 };

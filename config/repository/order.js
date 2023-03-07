@@ -1,5 +1,6 @@
 const conn = require("../database/database")
 const model = require("../model/index");
+const log = require("../service/log")
 const repository = {};
 
 repository.createOrder = async function (req, callback) {
@@ -25,6 +26,7 @@ repository.createOrder = async function (req, callback) {
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error);
   }
@@ -51,6 +53,7 @@ repository.getAllOrder = async function (req, callback) {
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -60,6 +63,7 @@ repository.getOrderById = async function (id, callback) {
     const data = await model.order.findByPk(id)
     return callback(null, data)
   } catch (error) {
+    log.logger.error(error);
     return callback(error)
   }
 }
@@ -69,6 +73,7 @@ repository.updateOrder = async function (data, callback) {
     await model.order.update(data, {where: {id:data.id}})
     return callback(null)
   } catch (error) {
+    log.logger.error(error);
     return callback(error)
   }
 }
@@ -84,6 +89,7 @@ repository.declineOrder = async function (orderId, productId, callback) {
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error);
   }

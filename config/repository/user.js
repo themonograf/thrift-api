@@ -1,5 +1,6 @@
 const { Op } = require("sequelize")
 const model = require("../model/index")
+const log = require("../service/log")
 const repository = {}
 
 repository.createUser = async function (req, callback) {
@@ -12,6 +13,7 @@ repository.createUser = async function (req, callback) {
         })
         return callback(null)
     } catch (error) {
+        log.logger.error(error);
         return callback(error)
     }
 }
@@ -28,6 +30,7 @@ repository.updateUser = async function (req, callback) {
 
         return callback(null)
     } catch (error) {
+        log.logger.error(error);
         return callback(error)
     }
 }
@@ -41,6 +44,7 @@ repository.deleteUser = async function (req, callback) {
 
         return callback(null)
     } catch (error) {
+        log.logger.error(error);
         return callback(error)
     }
 }
@@ -61,6 +65,7 @@ repository.getAllUser = async function (req, callback) {
         
         return callback(null, {total: count, data: rows})
     } catch (error) {
+        log.logger.error(error);
         return callback(error)
     }
 }
@@ -72,6 +77,7 @@ repository.getUserByUsername = async function (username, callback) {
         })
         return callback(null, data)
     } catch (error) {
+        log.logger.error(error);
         return callback(error)
     }
 }

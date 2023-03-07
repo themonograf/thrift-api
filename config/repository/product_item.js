@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const model = require("../model/index");
+const log = require("../service/log")
 const repository = {};
 
 repository.upsertProductItem = async function (req, callback) {
@@ -18,6 +19,7 @@ repository.upsertProductItem = async function (req, callback) {
     });
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -39,6 +41,7 @@ repository.getProductItemByReseller = async function (req, callback) {
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };

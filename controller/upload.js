@@ -1,5 +1,6 @@
 const service = require("../config/service/upload")
 const repo = require("../config/repository/index")
+const log = require("../config/service/log")
 
 const controller = {}
 
@@ -8,12 +9,14 @@ controller.uploadSingle = async (req, res) => {
         try {
             // service.ftpClient.end()
             if(err){
+                log.logger.error(err.message);
                 throw new Error(err.message)
             }
 
             await createMasterImage(req.file, req.body.category)
         } catch (error) {
             if(error) {
+                log.logger.error(error);
                 return res.status(400).json({
                     success: false,
                     message: error.message
@@ -33,6 +36,7 @@ controller.uploadMultiple = async (req, res) => {
         try {
             // service.ftpClient.end()
             if(err){
+                log.logger.error(err.message);
                 throw new Error(err.message)
             }
 
@@ -40,6 +44,7 @@ controller.uploadMultiple = async (req, res) => {
 
         } catch (error) {
             if(error) {
+                log.logger.error(error);
                 return res.status(404).json({
                     success: false,
                     message: error.message

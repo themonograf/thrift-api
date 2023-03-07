@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const conn = require("../database/database")
 const model = require("../model/index");
+const log = require("../service/log")
 const repository = {};
 
 repository.createProductCategory = async function (req, callback) {
@@ -17,6 +18,7 @@ repository.createProductCategory = async function (req, callback) {
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error.message);
   }
@@ -40,6 +42,7 @@ repository.updateProductCategory = async function (req, masterImage, callback) {
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error.message);
   }
@@ -56,6 +59,7 @@ repository.deleteProductCategory = async function (productCategory, callback) {
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error.message);
   }
@@ -74,6 +78,7 @@ repository.getAllProductCategory = async function (req, callback) {
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -83,6 +88,7 @@ repository.getProductCategoryById = async function (id, callback) {
     const data = await model.productCategory.findByPk(id);
     return callback(null, data);
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -100,7 +106,7 @@ repository.getAllProductCategoryCatalog = async function (req, callback) {
 
     return callback(null, data);
   } catch (error) {
-    console.log(error)
+    log.logger.error(error);
     return callback(error);
   }
 };

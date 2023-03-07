@@ -32,7 +32,6 @@ middleware.validate = (method) => {
         body("productCategoryId", "Category is required").notEmpty().exists().isInt(),
         body("name", "Name is required").notEmpty().exists(),
         body("variant", "Variant is required").notEmpty().exists(),
-        body("prefix", "Prefix Code is required").notEmpty().exists(),
         body("description", "Description is required").notEmpty().exists(),
         body("basicPrice", "Basic Price is required").notEmpty().exists().isInt(),
         body("catalogPrice", "Catalog Price is required").notEmpty().exists().isInt(),

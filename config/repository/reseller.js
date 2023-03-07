@@ -1,5 +1,6 @@
 const { Op } = require("sequelize");
 const model = require("../model/index");
+const log = require("../service/log")
 const repository = {};
 
 repository.getResellerByUsername = async function (username, callback) {
@@ -9,6 +10,7 @@ repository.getResellerByUsername = async function (username, callback) {
     });
     return callback(null, data);
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -20,6 +22,7 @@ repository.getResellerById = async function (id, callback) {
     });
     return callback(null, data);
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -29,6 +32,7 @@ repository.createReseller = async function (data, callback) {
     await model.reseller.create(data)
     return callback(null)
   } catch (error) {
+    log.logger.error(error);
     return callback(error)
   }
 }
@@ -38,6 +42,7 @@ repository.updateReseller = async function (data, callback) {
     await model.reseller.update(data, {where: {id:data.id}})
     return callback(null)
   } catch (error) {
+    log.logger.error(error);
     return callback(error)
   }
 }
@@ -47,6 +52,7 @@ repository.deleteReseller = async function (id, callback) {
     await model.reseller.destroy({where: {id}})
     return callback(null)
   } catch (error) {
+    log.logger.error(error);
     return callback(error)
   }
 }
@@ -70,6 +76,7 @@ repository.getAllReseller = async function (req, callback) {
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -83,6 +90,7 @@ repository.getAllResellerSelectBox = async function (callback) {
 
     return callback(null, data);
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };

@@ -179,8 +179,18 @@ controller.updateProduct = async function (req, res) {
     }
   });
 
-  const code = prefix.toUpperCase() == dataProduct.code.substr(0, dataProduct.code.length-5) ? dataProduct.code : helper.generateRandomCode(prefix, 5)
-  const slug = name == dataProduct.name && prefix.toUpperCase() == dataProduct.code.substr(0, dataProduct.code.length-5) ? dataProduct.slug : helper.generateSlug(name + "-" + code)
+  const code = dataProduct.code
+  const slug = dataProduct.slug
+
+  if (prefix != "") {
+    if (prefix.toUpperCase() != dataProduct.code.substr(0, dataProduct.code.length-5)){
+      code = helper.generateRandomCode(prefix, 5)
+    }
+  }
+
+  if (code != dataProduct.code || name != dataProduct.name){
+    slug = helper.generateSlug(name + "-" + code)
+  }
 
   var product = {
     id,

@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const model = require("../model/index");
 const helper = require("../../helper/helper");
 const conn = require("../database/database")
+const log = require("../service/log")
 const repository = {};
 
 repository.getAllProductCatalog = async function (req, resellerId, callback) {
@@ -75,7 +76,7 @@ repository.getAllProductCatalog = async function (req, resellerId, callback) {
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
-    console.log(error)
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -116,6 +117,7 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
     });
     return callback(null, data);
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -127,6 +129,7 @@ repository.getProductById = async function (productId, callback) {
     })
     return callback(null, data)
   } catch (error) {
+    log.logger.error(error);
     return callback(error)
   }
 }
@@ -148,6 +151,7 @@ repository.createProduct = async function (product, dataProductImage, masterImag
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error.message);
   }
@@ -183,6 +187,7 @@ repository.updateProduct = async function (product, productImage, masterImageTak
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error.message);
   }
@@ -211,6 +216,7 @@ repository.getAllProduct = async function (req, callback) {
 
     return callback(null, { total: count, data: rows });
   } catch (error) {
+    log.logger.error(error);
     return callback(error);
   }
 };
@@ -230,6 +236,7 @@ repository.deleteProduct = async function (id, masterImageDestroy, callback) {
 
     return callback(null);
   } catch (error) {
+    log.logger.error(error);
     await t.rollback();
     return callback(error.message);
   }
