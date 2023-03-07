@@ -35,7 +35,7 @@ repository.deleteProductImage = async function (id, image, callback) {
   try {
     await model.productImage.destroy({where: { id:id }}, {transaction:t});
 
-    await model.masterImage.masterImage.update({isTaken: false}, {where : {image : image}}, {transaction:t});
+    await model.masterImage.masterImage.update({isTaken: false}, {where : {path : image}}, {transaction:t});
 
     await t.commit();
 

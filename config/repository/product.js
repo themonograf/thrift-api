@@ -143,7 +143,7 @@ repository.createProduct = async function (product, dataProductImage, masterImag
     
     await model.productImage.bulkCreate(productImage, {transaction:t});
     
-    await model.masterImage.masterImage.update({isTaken: true}, {where : {image : {
+    await model.masterImage.masterImage.update({isTaken: true}, {where : {path : {
       [Op.in]: masterImage
     }}}, {transaction:t});
 
@@ -173,12 +173,12 @@ repository.updateProduct = async function (product, productImage, masterImageTak
       await model.productImage.upsert(arr, {transaction:t})
     })
 
-    await model.masterImage.masterImage.update({isTaken: true}, {where : {image : {
+    await model.masterImage.masterImage.update({isTaken: true}, {where : {path : {
       [Op.in]: masterImageTaken
     }}}, {transaction:t});
 
     if(masterImageDestroy.length > 0){
-      await model.masterImage.masterImage.update({isTaken: false}, {where : {image : {
+      await model.masterImage.masterImage.update({isTaken: false}, {where : {path : {
         [Op.in]: masterImageDestroy
       }}}, {transaction:t});
     }
@@ -227,7 +227,7 @@ repository.deleteProduct = async function (id, masterImageDestroy, callback) {
     await model.product.destroy({where: { id }}, {transaction:t});
 
     if(masterImageDestroy.length > 0){
-      await model.masterImage.masterImage.update({isTaken: false}, {where : {image : {
+      await model.masterImage.masterImage.update({isTaken: false}, {where : {path : {
         [Op.in]: masterImageDestroy
       }}}, {transaction:t});
     }
