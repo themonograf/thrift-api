@@ -120,7 +120,7 @@ controller.createReseller = async function (req, res) {
     });
   }
 
-  const { name, address, email, phoneNumber, tokopedia, shopee, instagram, password, isAdmin } = req.body
+  const { name, address, email, phoneNumber, tokopedia, shopee, instagram, username, password, isAdmin } = req.body
 
   const salt = genSaltSync(10);
   const newPassword = hashSync(password, salt);
@@ -161,7 +161,7 @@ controller.updateReseller = async function (req, res) {
     });
   }
 
-  const { name, address, email, phoneNumber, tokopedia, shopee, instagram, isAdmin } = req.body
+  const { id, name, address, email, phoneNumber, tokopedia, shopee, instagram, username, isAdmin } = req.body
 
   let reseller = {
     id,
