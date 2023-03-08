@@ -161,7 +161,7 @@ controller.updateReseller = async function (req, res) {
     });
   }
 
-  const { id, name, address, email, phoneNumber, tokopedia, shopee, instagram, username, isAdmin } = req.body
+  const { id, name, address, email, phoneNumber, tokopedia, shopee, instagram, username, isAdmin, password } = req.body
 
   let reseller = {
     id,
