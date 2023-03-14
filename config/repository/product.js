@@ -87,10 +87,10 @@ repository.getProductByslug = async function (slug, resellerId, userId, callback
 
     includeCondition[0] = {model: model.productImage, as: 'productImage'}
     if((userId) && userId > 0){
-      includeCondition[1] = {model: model.productItem, where: {resellerId: userId}, required: false}
+      includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: userId}, required: false}
     }else{
       if (resellerId > 0) {
-        includeCondition[1] = {model: model.productItem, where: {resellerId: resellerId, enable: true}}
+        includeCondition[1] = {model: model.productItem, as: 'productItem', where: {resellerId: resellerId, enable: true}}
       }
     }
 

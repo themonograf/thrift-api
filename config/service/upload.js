@@ -42,4 +42,6 @@ service.uploads = multer({
     },
 });
 
+// service.deleteFile = 
+
 module.exports = service

@@ -19,14 +19,14 @@ controller.uploadSingle = async (req, res) => {
                 log.logger.error(error);
                 return res.status(400).json({
                     success: false,
-                    message: error.message
+                    message: error.name === 'SequelizeUniqueConstraintError' ? error.errors.map(e => e.message)[0] : error.name
                 })
             }
         }
 
         return res.json({
             success: true,
-            data: process.env.URL_CDN + req.file.path
+            data: process.env.URL_CDN + "/image?category=" + type + '&image=' + req.file.originalname
         })
     });
 }
@@ -47,14 +47,14 @@ controller.uploadMultiple = async (req, res) => {
                 log.logger.error(error);
                 return res.status(404).json({
                     success: false,
-                    message: error.message
+                    message: error.name === 'SequelizeUniqueConstraintError' ? error.errors.map(e => e.message)[0] : error.name
                 })
             }
         }
 
         return res.json({
             success: true,
-            data: []
+            data: req.files.map((obj) => (process.env.URL_CDN + "/image?category=" + req.body.category + '&image=' + obj.originalname))
         })
     });
 }
